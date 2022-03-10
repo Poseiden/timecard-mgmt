@@ -1,4 +1,4 @@
-package hr.model.domain.model.project_mgmt.project;
+package working.hour.mgmt.domain.model.project_mgmt.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientProject extends Project {
+public class SubProject {
     private String id;
-    private List<String> assignmentIdList;
+    private List<String> effortIdList;
+    private List<String> subEntryId;
 }

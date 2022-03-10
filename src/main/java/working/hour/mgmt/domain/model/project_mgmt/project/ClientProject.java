@@ -1,4 +1,4 @@
-package hr.model.domain.model.staff_mgmt.staff;
+package working.hour.mgmt.domain.model.project_mgmt.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,11 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Staff {
+@AllArgsConstructor
+public class ClientProject extends Project {
     private String id;
     private List<String> assignmentIdList;
-    private List<String> effortIdList;
-    private List<String> timeCardIdList;
 }

@@ -1,4 +1,4 @@
-package hr.model.domain.model.working_hour_mgmt.timecard;
+package working.hour.mgmt.domain.model.project_mgmt.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Entry {
-    private int hours;
-    private String projectId;
-    private List<SubEntry> subEntries;
+public class Project {
+    private String id;
+    private List<String> entryIds;
+    private List<SubProject> subProjects;
 }
