@@ -36,5 +36,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'hr.model.App'
+    mainClass = 'working.hour.mgmt.App'
 }
