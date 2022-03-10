@@ -1,4 +1,4 @@
-package hr.model.domain.model.project_management.project;
+package hr.model.domain.model.project_mgmt.assignment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class GeneralProject extends Project {
+@NoArgsConstructor
+public class Assignment {
     private String id;
+    private String staffId;
+    private String clientProjectId;
 }

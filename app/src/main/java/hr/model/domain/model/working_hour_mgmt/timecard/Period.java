@@ -1,4 +1,4 @@
-package hr.model.domain.model.effort_management.timecard;
+package hr.model.domain.model.working_hour_mgmt.timecard;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

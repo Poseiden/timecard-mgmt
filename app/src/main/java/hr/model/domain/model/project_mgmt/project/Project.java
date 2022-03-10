@@ -1,4 +1,4 @@
-package hr.model.domain.model.project_management.project;
+package hr.model.domain.model.project_mgmt.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SubProject {
+@NoArgsConstructor
+public class Project {
     private String id;
-    private List<String> effortIdList;
-    private List<String> subEntryId;
+    private List<String> entryIds;
+    private List<SubProject> subProjects;
 }
