@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Assignment {
     private String id;
-    private String staffId;
+    private String employeeId;
     private String clientProjectId;
 }

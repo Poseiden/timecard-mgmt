@@ -13,7 +13,7 @@ import java.util.Calendar;
 @AllArgsConstructor
 public class Effort {
     private String id;
-    private String staffId;
+    private String employeeId;
     private Calendar workingDay;
     private int workingHours;
     private String locationId;
