@@ -11,4 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Location {
     private String id;
+    private String code;
+    private String name;
 }

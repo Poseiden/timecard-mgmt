@@ -32,4 +32,7 @@ public class LocationDBO {
 
     @OneToMany(mappedBy = "locationDBO")
     private List<EffortDBO> effortDBOList;
+
+    private String code;
+    private String name;
 }
