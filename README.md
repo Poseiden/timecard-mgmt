@@ -28,9 +28,9 @@
 ## 词汇表
 |  领域名词 |  英文   |  模型  |   表名  |  备注  |
 |  :----:  | :----: | :----: | :----: | :----: |
-|    工时  | effort |  Effort  |  | 
-| 工时登记  | timecard | TimeCard  | 
-| 登记项  | entry |  Entry | 
+|    工时  | effort |  Effort  | effort | 
+| 工时登记  | timecard | TimeCard | / |  
+| 登记项  | entry |  Entry | / | 
 | 子登记项  | subentry |  SubEntry |  
-| 地点  | location | Location | 
-| 时间段  | period | Period | 
+| 地点  | location | Location | location |
+| 时间段  | period | Period | / | 
