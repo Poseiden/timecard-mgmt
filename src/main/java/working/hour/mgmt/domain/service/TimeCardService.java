@@ -14,7 +14,7 @@ public class TimeCardService {
         this.effortRepository = effortRepository;
     }
 
-    public void save(List<Effort> efforts) {
+    public void saveAll(List<Effort> efforts) {
         this.effortRepository.saveAll(efforts);
     }
 }

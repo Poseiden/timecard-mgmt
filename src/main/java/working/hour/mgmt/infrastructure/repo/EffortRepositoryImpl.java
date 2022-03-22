@@ -17,5 +17,6 @@ public class EffortRepositoryImpl  implements EffortRepository {
 
     @Override
     public void saveAll(List<Effort> efforts) {
+        this.effortDBRepo.saveAll(efforts);
     }
 }

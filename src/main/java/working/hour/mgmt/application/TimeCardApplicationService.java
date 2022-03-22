@@ -26,27 +26,27 @@ public class TimeCardApplicationService {
     public void submit(SubmitTimeCardDTO submitTimeCardDto) {
         Map<String, List<String>> toBeVerifiedProjectId = Maps.newHashMap();
         List<Effort> efforts = Lists.newArrayList();
-//        submitTimeCardDto.getEntryDTOList()
-//            .forEach(entryDTO -> {
-//                entryDTO.getSubEntryDTOList().forEach(
-//                        subEntryDTO -> {
-//                            List<String> subProjectIdList = toBeVerifiedProjectId.get(entryDTO.getProjectId());
-//                            if (Objects.nonNull(subProjectIdList)) {
-//                                subProjectIdList.add(subEntryDTO.getSubProjectId());
-//                            } else {
-//                                List<String> subProjectIds = Lists.newArrayList();
-//                                subProjectIds.add(subEntryDTO.getSubProjectId());
-//                                toBeVerifiedProjectId.put(entryDTO.getProjectId(), subProjectIds);
-//                            }
-//
-//                            subEntryDTO.getEffortDTOList().forEach(
-//                                effortDTO ->
-//                                        efforts.add(new Effort(submitTimeCardDto.getEmployeeId(),
-//                                                effortDTO.getDate(), effortDTO.getWorkingHours(),
-//                                                subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
-//                                                effortDTO.getNote(), subEntryDTO.getSubProjectId())));
-//                        });
-//            });
+        submitTimeCardDto.getEntryDTOList()
+            .forEach(entryDTO -> {
+                entryDTO.getSubEntryDTOList().forEach(
+                        subEntryDTO -> {
+                            List<String> subProjectIdList = toBeVerifiedProjectId.get(entryDTO.getProjectId());
+                            if (Objects.nonNull(subProjectIdList)) {
+                                subProjectIdList.add(subEntryDTO.getSubProjectId());
+                            } else {
+                                List<String> subProjectIds = Lists.newArrayList();
+                                subProjectIds.add(subEntryDTO.getSubProjectId());
+                                toBeVerifiedProjectId.put(entryDTO.getProjectId(), subProjectIds);
+                            }
+
+                            subEntryDTO.getEffortDTOList().forEach(
+                                effortDTO ->
+                                        efforts.add(new Effort(submitTimeCardDto.getEmployeeId(),
+                                                effortDTO.getDate(), effortDTO.getWorkingHours(),
+                                                subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
+                                                effortDTO.getNote(), subEntryDTO.getSubProjectId())));
+                        });
+            });
 
         Map<String, List<String>> verifyResult = this.projectRepository.verifyProjectsExist(toBeVerifiedProjectId);
 
@@ -54,6 +54,6 @@ public class TimeCardApplicationService {
             //todo to throw exception and break
         }
 
-        this.timeCardService.save(efforts);
+        this.timeCardService.saveAll(efforts);
     }
 }
