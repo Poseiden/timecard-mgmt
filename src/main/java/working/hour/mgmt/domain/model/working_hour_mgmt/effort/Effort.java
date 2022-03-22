@@ -33,7 +33,16 @@ public class Effort {
     private boolean billable;
     private String note;
 
-    private String subEntryId;
     private String subProjectId;
 
+    public Effort(String employeeId, Calendar workingDay, int workingHours, String locationId,
+                  boolean billable, String note, String subProjectId) {
+        this.employeeId = employeeId;
+        this.workingDay = workingDay;
+        this.workingHours = workingHours;
+        this.locationId = locationId;
+        this.billable = billable;
+        this.note = note;
+        this.subProjectId = subProjectId;
+    }
 }
