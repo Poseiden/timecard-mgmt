@@ -35,6 +35,31 @@ public class TimeCardControllerTest extends BaseTest {
         when(projectRepository.verifyProjectsExist(any())).thenReturn(null);
 
         //when
+        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
+        MockHttpServletResponse response = this.mockMvc
+                .perform(post("/effortentries/submit")
+                        .contentType("application/json")
+                        .content(JSON.toJSONString(submitTimeCardDTO)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        //then
+        Effort effort = effortDBRepo.findAll().get(0);
+
+        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntryDTOList().get(0).getSubEntryDTOList().get(0);
+        EffortDTO effortDTO = subEntryDTO.getEffortDTOList().get(0);
+
+        assertEquals(effort.getEmployeeId(), submitTimeCardDTO.getEmployeeId());
+        assertEquals(effort.getLocationId(), subEntryDTO.getLocationCode());
+        assertEquals(effort.getNote(), effortDTO.getNote());
+        assertEquals(effort.getSubProjectId(), subEntryDTO.getSubProjectId());
+        assertEquals(effort.getWorkingDay().toString(), effortDTO.getDate());
+        assertEquals(effort.getWorkingHours(), effortDTO.getWorkingHours());
+        assertEquals(effort.isBillable(), subEntryDTO.isBillable());
+
+    }
+
+    private SubmitTimeCardDTO buildSubmitTimeCardDTO() {
         SubmitTimeCardDTO submitTimeCardDTO = new SubmitTimeCardDTO();
         submitTimeCardDTO.setEmployeeId("employeeId");
 
@@ -55,23 +80,7 @@ public class TimeCardControllerTest extends BaseTest {
         entryDTO.setSubEntryDTOList(Lists.newArrayList(subEntryDTO));
         submitTimeCardDTO.setEntryDTOList(Lists.newArrayList(entryDTO));
 
-        MockHttpServletResponse response = this.mockMvc
-                .perform(post("/effortentries/submit")
-                        .contentType("application/json")
-                        .content(JSON.toJSONString(submitTimeCardDTO)))
-                .andExpect(status().isOk())
-                .andReturn().getResponse();
-
-        //then
-        Effort effort = effortDBRepo.findAll().get(0);
-        assertEquals(effort.getEmployeeId(), submitTimeCardDTO.getEmployeeId());
-        assertEquals(effort.getLocationId(), subEntryDTO.getLocationCode());
-        assertEquals(effort.getNote(), effortDTO.getNote());
-        assertEquals(effort.getSubProjectId(), subEntryDTO.getSubProjectId());
-        assertEquals(effort.getWorkingDay().toString(), effortDTO.getDate());
-        assertEquals(effort.getWorkingHours(), effortDTO.getWorkingHours());
-        assertEquals(effort.isBillable(), subEntryDTO.isBillable());
-
+        return submitTimeCardDTO;
     }
 
 }
