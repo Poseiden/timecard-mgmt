@@ -3,6 +3,7 @@ package working.hour.mgmt.application;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
@@ -11,6 +12,7 @@ import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
 import working.hour.mgmt.domain.repository.ProjectRepository;
 import working.hour.mgmt.domain.service.TimeCardService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class TimeCardApplicationService {
 
         Map<String, List<String>> verifyResult = this.projectRepository.verifyProjectsExist(toBeVerifiedProjectId);
 
-        if (verifyResult.size() != 0) {
+        if (!CollectionUtils.isEmpty(verifyResult)) {
             throw new BusinessException(PROJECT_NOT_EXISTS);
         }
 
@@ -50,7 +52,8 @@ public class TimeCardApplicationService {
                 subEntryDTO -> {
                     String subProjectId = subEntryDTO.getSubProjectId();
                     toBeVerifiedProjectId.putIfAbsent(entryDTO.getProjectId(),
-                            Lists.newArrayList(subProjectId)).add(subProjectId);
+                            Lists.newArrayList(subProjectId));
+                    toBeVerifiedProjectId.get(entryDTO.getProjectId()).add(subProjectId);
                     efforts.addAll(buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO));
                 });
 
@@ -60,7 +63,7 @@ public class TimeCardApplicationService {
     private List<Effort> buildEffortsAccordingToEffortDTO(String employeeId, SubEntryDTO subEntryDTO) {
         return subEntryDTO.getEffortDTOList().stream()
                 .map(effortDTO -> new Effort(employeeId,
-                    effortDTO.getDate(), effortDTO.getWorkingHours(),
+                        LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
                     subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
                     effortDTO.getNote(), subEntryDTO.getSubProjectId()))
                 .collect(Collectors.toList());

@@ -1,12 +1,16 @@
 package working.hour.mgmt.application.dto;
 
 import lombok.Data;
-
-import java.util.Calendar;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
+@NoArgsConstructor
 public class EffortDTO {
-    private Calendar date;
+    @NonNull
+    private String date;
+    @NonNull
     private int workingHours;
+    @NonNull
     private String note;
 }

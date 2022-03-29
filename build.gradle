@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql:8.5.2'
 
     implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'com.alibaba:fastjson:1.2.80'
+
 
 
     // Use JUnit test framework.

@@ -13,10 +13,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public Map<String, List<String>> verifyProjectsExist(Map<String, List<String>> toBeVerifiedProjectId) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "this is url";
+        String url = "/this is url";
 
-        VerifyProjectExistResponse response = restTemplate.getForEntity(url, VerifyProjectExistResponse.class).getBody();
-
-        return response.getNotExistsProjectIds();
+        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class).getBody().getNotExistsProjectIdList();
     }
 }

@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class Effort {
     @Generated(GenerationTime.INSERT)
     private String id;
     private String employeeId;
-    private Calendar workingDay;
+    private LocalDate workingDay;
     private int workingHours;
     private String locationId;
     private boolean billable;
@@ -35,7 +35,7 @@ public class Effort {
 
     private String subProjectId;
 
-    public Effort(String employeeId, Calendar workingDay, int workingHours, String locationId,
+    public Effort(String employeeId, LocalDate workingDay, int workingHours, String locationId,
                   boolean billable, String note, String subProjectId) {
         this.employeeId = employeeId;
         this.workingDay = workingDay;
