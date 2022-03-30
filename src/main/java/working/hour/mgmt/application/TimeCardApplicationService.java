@@ -50,9 +50,12 @@ public class TimeCardApplicationService {
         entryDTO.getSubEntryDTOList().forEach(
                 subEntryDTO -> {
                     String subProjectId = subEntryDTO.getSubProjectId();
-                    toBeVerifiedProjectId.putIfAbsent(entryDTO.getProjectId(),
-                            Lists.newArrayList(subProjectId));
-                    toBeVerifiedProjectId.get(entryDTO.getProjectId()).add(subProjectId);
+                    if (toBeVerifiedProjectId.containsKey(entryDTO.getProjectId())) {
+                        toBeVerifiedProjectId.get(entryDTO.getProjectId()).add(subProjectId);
+                    } else {
+                        toBeVerifiedProjectId.putIfAbsent(entryDTO.getProjectId(),
+                                Lists.newArrayList(subProjectId));
+                    }
                     efforts.addAll(buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO));
                 });
 
