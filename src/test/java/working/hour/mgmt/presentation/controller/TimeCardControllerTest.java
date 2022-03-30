@@ -11,8 +11,8 @@ import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
 import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
-import working.hour.mgmt.domain.repository.ProjectRepository;
-import working.hour.mgmt.infrastructure.repo.hibernate.EffortDBRepo;
+import working.hour.mgmt.domain.service.ProjectProxy;
+import working.hour.mgmt.infrastructure.persistence.hibernate.EffortDBRepo;
 
 import java.time.LocalDate;
 
@@ -27,15 +27,15 @@ public class TimeCardControllerTest extends BaseTest {
     private EffortDBRepo effortDBRepo;
 
     @MockBean
-    private ProjectRepository projectRepository;
+    private ProjectProxy projectProxy;
 
     @Test
     public void should_return_success_when_submit_time_card() throws Exception {
         //given
-        when(projectRepository.verifyProjectsExist(any())).thenReturn(null);
+        when(projectProxy.verifyProjectsExist(any())).thenReturn(null);
 
         //when
-        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
+        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();
         MockHttpServletResponse response = this.mockMvc
                 .perform(post("/effortentries/submit")
                         .contentType("application/json")
@@ -59,7 +59,7 @@ public class TimeCardControllerTest extends BaseTest {
 
     }
 
-    private SubmitTimeCardDTO buildSubmitTimeCardDTO() {
+    private SubmitTimeCardDTO buildSubmitTimeCardDTOData() {
         SubmitTimeCardDTO submitTimeCardDTO = new SubmitTimeCardDTO();
         submitTimeCardDTO.setEmployeeId("employeeId");
 

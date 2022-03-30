@@ -1,9 +1,9 @@
-package working.hour.mgmt.infrastructure.repo;
+package working.hour.mgmt.infrastructure.persistence;
 
 import org.springframework.stereotype.Repository;
 import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
-import working.hour.mgmt.domain.repository.EffortRepository;
-import working.hour.mgmt.infrastructure.repo.hibernate.EffortDBRepo;
+import working.hour.mgmt.domain.model.working_hour_mgmt.effort.EffortRepository;
+import working.hour.mgmt.infrastructure.persistence.hibernate.EffortDBRepo;
 
 import java.util.List;
 

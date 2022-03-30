@@ -1,4 +1,4 @@
-package working.hour.mgmt.infrastructure.repo.hibernate;
+package working.hour.mgmt.infrastructure.persistence.hibernate;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

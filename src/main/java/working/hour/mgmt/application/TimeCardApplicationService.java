@@ -9,7 +9,7 @@ import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
 import working.hour.mgmt.domain.common.BusinessException;
 import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
-import working.hour.mgmt.domain.repository.ProjectRepository;
+import working.hour.mgmt.domain.service.ProjectProxy;
 import working.hour.mgmt.domain.service.TimeCardService;
 
 import java.time.LocalDate;
@@ -22,12 +22,11 @@ import static working.hour.mgmt.domain.common.ErrorKey.PROJECT_NOT_EXISTS;
 @Service
 public class TimeCardApplicationService {
     private final TimeCardService timeCardService;
-    private final ProjectRepository projectRepository;
+    private final ProjectProxy projectProxy;
 
-    public TimeCardApplicationService(TimeCardService timeCardService,
-                                      ProjectRepository projectRepository) {
+    public TimeCardApplicationService(TimeCardService timeCardService, ProjectProxy projectProxy) {
         this.timeCardService = timeCardService;
-        this.projectRepository = projectRepository;
+        this.projectProxy = projectProxy;
     }
 
     public void submit(SubmitTimeCardDTO submitTimeCardDto) {
@@ -37,7 +36,7 @@ public class TimeCardApplicationService {
                 .forEach(entryDTO ->
                         efforts.addAll(buildEffortsAndCollectProjectIds(toBeVerifiedProjectId, entryDTO, submitTimeCardDto.getEmployeeId())));
 
-        Map<String, List<String>> verifyResult = this.projectRepository.verifyProjectsExist(toBeVerifiedProjectId);
+        Map<String, List<String>> verifyResult = this.projectProxy.verifyProjectsExist(toBeVerifiedProjectId);
 
         if (!CollectionUtils.isEmpty(verifyResult)) {
             throw new BusinessException(PROJECT_NOT_EXISTS);
