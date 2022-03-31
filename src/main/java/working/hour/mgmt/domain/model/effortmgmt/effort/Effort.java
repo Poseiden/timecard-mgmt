@@ -7,10 +7,13 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+
+import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "effort")
@@ -31,10 +34,11 @@ public class Effort {
 
     private String subProjectId;
     private String projectId;
-    //todo to add status field
+    @Enumerated(STRING)
+    private EffortStatus effortStatus;
 
     public Effort(String employeeId, LocalDate workingDay, int workingHours, String locationId,
-                  boolean billable, String note, String subProjectId, String projectId) {
+                  boolean billable, String note, String subProjectId, String projectId, EffortStatus effortStatus) {
         this.employeeId = employeeId;
         this.workingDay = workingDay;
         this.workingHours = workingHours;
@@ -43,5 +47,6 @@ public class Effort {
         this.note = note;
         this.subProjectId = subProjectId;
         this.projectId = projectId;
+        this.effortStatus = effortStatus;
     }
 }

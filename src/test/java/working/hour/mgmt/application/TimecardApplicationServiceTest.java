@@ -24,6 +24,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static working.hour.mgmt.domain.model.effortmgmt.effort.EffortStatus.SUBMITTED;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TimecardApplicationServiceTest {
@@ -57,6 +58,7 @@ public class TimecardApplicationServiceTest {
         expectEffort.setWorkingHours(expectEffortDTO.getWorkingHours());
         expectEffort.setBillable(expectSubEntryDTO.isBillable());
         expectEffort.setProjectId(expectEntry.getProjectId());
+        expectEffort.setEffortStatus(SUBMITTED);
 
         Map<String, List<String>> projectIdMap = Maps.newHashMap();
         projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(expectSubEntryDTO.getSubProjectId()));

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static working.hour.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
+import static working.hour.mgmt.domain.model.effortmgmt.effort.EffortStatus.SUBMITTED;
 
 @Service
 public class TimecardApplicationService {
@@ -70,7 +71,8 @@ public class TimecardApplicationService {
                 .map(effortDTO -> new Effort(employeeId,
                         LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
                     subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
-                    effortDTO.getNote(), subEntryDTO.getSubProjectId(), projectId))
+                    effortDTO.getNote(), subEntryDTO.getSubProjectId(),
+                        projectId, SUBMITTED))
                 .collect(Collectors.toList());
     }
 }
