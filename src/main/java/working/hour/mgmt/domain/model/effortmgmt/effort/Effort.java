@@ -30,11 +30,11 @@ public class Effort {
     private String note;
 
     private String subProjectId;
+    private String projectId;
     //todo to add status field
-    //todo to add projectId
 
     public Effort(String employeeId, LocalDate workingDay, int workingHours, String locationId,
-                  boolean billable, String note, String subProjectId) {
+                  boolean billable, String note, String subProjectId, String projectId) {
         this.employeeId = employeeId;
         this.workingDay = workingDay;
         this.workingHours = workingHours;
@@ -42,5 +42,6 @@ public class Effort {
         this.billable = billable;
         this.note = note;
         this.subProjectId = subProjectId;
+        this.projectId = projectId;
     }
 }

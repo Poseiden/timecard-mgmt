@@ -44,7 +44,9 @@ public class TimecardApplicationServiceTest {
         timeCardApplicationService.submit(submitTimeCardDTO);
 
         //then
-        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
+        //todo to change name to actual....
+        EntryDTO entryDTO = submitTimeCardDTO.getEntries().get(0);
+        SubEntryDTO subEntryDTO = entryDTO.getSubEntries().get(0);
         EffortDTO effortDTO = subEntryDTO.getEfforts().get(0);
 
         Effort effort = new Effort();
@@ -55,6 +57,7 @@ public class TimecardApplicationServiceTest {
         effort.setWorkingDay(LocalDate.parse(effortDTO.getDate()));
         effort.setWorkingHours(effortDTO.getWorkingHours());
         effort.setBillable(subEntryDTO.isBillable());
+        effort.setProjectId(entryDTO.getProjectId());
 
         Map<String, List<String>> projectIdMap = Maps.newHashMap();
         projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(subEntryDTO.getSubProjectId()));

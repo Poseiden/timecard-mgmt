@@ -46,14 +46,16 @@ public class TimecardControllerTest extends BaseTest {
         //then
         Effort ActualEffort = effortRepoJPA.findAll().get(0);
 
-        SubEntryDTO expectSubEntry = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
+        EntryDTO expectEntry = submitTimeCardDTO.getEntries().get(0);
+        SubEntryDTO expectSubEntry = expectEntry.getSubEntries().get(0);
         EffortDTO expectEffort = expectSubEntry.getEfforts().get(0);
 
-        assertEffort(ActualEffort, expectSubEntry, expectEffort, submitTimeCardDTO.getEmployeeId());
+        assertEffort(ActualEffort, expectSubEntry, expectEffort, submitTimeCardDTO.getEmployeeId(), expectEntry.getProjectId());
 
     }
 
-    private void assertEffort(Effort actualEffort, SubEntryDTO expectSubEntry, EffortDTO expectEffort, String employeeId) {
+    private void assertEffort(Effort actualEffort, SubEntryDTO expectSubEntry, EffortDTO expectEffort,
+                              String employeeId, String projectId) {
         assertEquals(employeeId, actualEffort.getEmployeeId());
         assertEquals(expectSubEntry.getLocationCode(), actualEffort.getLocationId());
         assertEquals(expectEffort.getNote(), actualEffort.getNote());
@@ -61,6 +63,7 @@ public class TimecardControllerTest extends BaseTest {
         assertEquals(expectEffort.getDate(), actualEffort.getWorkingDay().toString());
         assertEquals(expectEffort.getWorkingHours(), actualEffort.getWorkingHours());
         assertEquals(expectSubEntry.isBillable(), actualEffort.isBillable());
+        assertEquals(projectId, actualEffort.getProjectId());
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTO() {

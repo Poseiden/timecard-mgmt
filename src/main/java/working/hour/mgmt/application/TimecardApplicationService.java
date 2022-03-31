@@ -52,24 +52,25 @@ public class TimecardApplicationService {
         entryDTO.getSubEntries().forEach(
                 subEntryDTO -> {
                     String subProjectId = subEntryDTO.getSubProjectId();
-                    if (toBeVerifiedProjectId.containsKey(entryDTO.getProjectId())) {
-                        toBeVerifiedProjectId.get(entryDTO.getProjectId()).add(subProjectId);
+                    String projectId = entryDTO.getProjectId();
+                    if (toBeVerifiedProjectId.containsKey(projectId)) {
+                        toBeVerifiedProjectId.get(projectId).add(subProjectId);
                     } else {
-                        toBeVerifiedProjectId.putIfAbsent(entryDTO.getProjectId(),
+                        toBeVerifiedProjectId.putIfAbsent(projectId,
                                 Lists.newArrayList(subProjectId));
                     }
-                    efforts.addAll(buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO));
+                    efforts.addAll(buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO, projectId));
                 });
 
         return efforts;
     }
 
-    private List<Effort> buildEffortsAccordingToEffortDTO(String employeeId, SubEntryDTO subEntryDTO) {
+    private List<Effort> buildEffortsAccordingToEffortDTO(String employeeId, SubEntryDTO subEntryDTO, String projectId) {
         return subEntryDTO.getEfforts().stream()
                 .map(effortDTO -> new Effort(employeeId,
                         LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
                     subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
-                    effortDTO.getNote(), subEntryDTO.getSubProjectId()))
+                    effortDTO.getNote(), subEntryDTO.getSubProjectId(), projectId))
                 .collect(Collectors.toList());
     }
 }
