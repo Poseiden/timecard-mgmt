@@ -46,19 +46,21 @@ public class TimecardControllerTest extends BaseTest {
         //then
         Effort ActualEffort = effortRepoJPA.findAll().get(0);
 
-        //todo rename to expect...
         SubEntryDTO expectSubEntry = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
         EffortDTO expectEffort = expectSubEntry.getEfforts().get(0);
 
-        //todo to extract assert method
-        assertEquals(submitTimeCardDTO.getEmployeeId(), ActualEffort.getEmployeeId());
-        assertEquals(expectSubEntry.getLocationCode(), ActualEffort.getLocationId());
-        assertEquals(expectEffort.getNote(), ActualEffort.getNote());
-        assertEquals(expectSubEntry.getSubProjectId(), ActualEffort.getSubProjectId());
-        assertEquals(expectEffort.getDate(), ActualEffort.getWorkingDay().toString());
-        assertEquals(expectEffort.getWorkingHours(), ActualEffort.getWorkingHours());
-        assertEquals(expectSubEntry.isBillable(), ActualEffort.isBillable());
+        assertEffort(ActualEffort, expectSubEntry, expectEffort, submitTimeCardDTO.getEmployeeId());
 
+    }
+
+    private void assertEffort(Effort actualEffort, SubEntryDTO expectSubEntry, EffortDTO expectEffort, String employeeId) {
+        assertEquals(employeeId, actualEffort.getEmployeeId());
+        assertEquals(expectSubEntry.getLocationCode(), actualEffort.getLocationId());
+        assertEquals(expectEffort.getNote(), actualEffort.getNote());
+        assertEquals(expectSubEntry.getSubProjectId(), actualEffort.getSubProjectId());
+        assertEquals(expectEffort.getDate(), actualEffort.getWorkingDay().toString());
+        assertEquals(expectEffort.getWorkingHours(), actualEffort.getWorkingHours());
+        assertEquals(expectSubEntry.isBillable(), actualEffort.isBillable());
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTO() {
