@@ -37,7 +37,7 @@ public class TimecardApplicationService {
         Map<String, List<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
-                                e -> Lists.newArrayList(e.getSubProjectId()),
+                                effort -> Lists.newArrayList(effort.getSubProjectId()),
                                 this::mergeValueList));
 
         verifyProjectIdsExist(toBeVerifiedProjectId);
