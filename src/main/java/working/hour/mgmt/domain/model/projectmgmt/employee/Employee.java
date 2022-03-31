@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Employee {
     private String id;
-    private List<String> assignmentIdList;
-    private List<String> effortIdList;
-    private List<String> timeCardIdList;
+    private List<String> assignmentIds;
+    private List<String> effortIds;
+    private List<String> timeCardIds;
 }

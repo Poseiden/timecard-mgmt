@@ -14,6 +14,4 @@ public class SubmitTimecardDTO {
 
     @NonNull
     List<EntryDTO> entries;
-
-    //todo change xxxList to xxxs
 }

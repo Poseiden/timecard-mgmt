@@ -13,5 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ClientProject extends Project {
     private String id;
-    private List<String> assignmentIdList;
+    private List<String> assignmentIds;
 }

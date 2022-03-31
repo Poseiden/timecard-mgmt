@@ -16,6 +16,6 @@ public class ProjectServiceProxy implements ProjectService {
         //todo to change acutal url
         String url = "/this is url";
 
-        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class).getBody().getNotExistsProjectIdList();
+        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class).getBody().getNotExistsProjectIds();
     }
 }

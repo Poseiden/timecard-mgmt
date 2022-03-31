@@ -28,14 +28,14 @@ public class TimecardApplicationService {
         this.projectService = projectService;
     }
 
-    public void submit(SubmitTimecardDTO submitTimeCardDto) {
+    public void submit(SubmitTimecardDTO submitTimecardDto) {
         Map<String, List<String>> toBeVerifiedProjectId = Maps.newHashMap();
         List<Effort> efforts = Lists.newArrayList();
 
-        submitTimeCardDto.getEntries()
+        submitTimecardDto.getEntries()
                 .forEach(entryDTO ->
                         efforts.addAll(
-                                buildEffortsAndCollectProjectIds(toBeVerifiedProjectId, entryDTO, submitTimeCardDto.getEmployeeId())));
+                                buildEffortsAndCollectProjectIds(toBeVerifiedProjectId, entryDTO, submitTimecardDto.getEmployeeId())));
 
         Map<String, List<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 

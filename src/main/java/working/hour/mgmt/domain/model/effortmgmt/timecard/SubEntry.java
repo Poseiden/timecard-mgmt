@@ -16,5 +16,5 @@ public class SubEntry {
     private String locationId;
     private boolean billable;
     private String note;
-    private List<String> effortIdList;
+    private List<String> effortIds;
 }

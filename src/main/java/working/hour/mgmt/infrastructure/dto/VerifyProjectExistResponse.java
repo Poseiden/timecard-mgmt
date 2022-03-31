@@ -9,5 +9,5 @@ import java.util.Map;
 @Data
 public class VerifyProjectExistResponse {
     @NonNull
-    private Map<String, List<String>> notExistsProjectIdList;
+    private Map<String, List<String>> notExistsProjectIds;
 }

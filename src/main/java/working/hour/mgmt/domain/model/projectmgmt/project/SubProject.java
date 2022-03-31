@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SubProject {
     private String id;
-    private List<String> effortIdList;
-    private List<String> subEntryId;
+    private List<String> effortIds;
+    private List<String> subEntries;
 }
