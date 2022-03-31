@@ -1,7 +1,6 @@
 package working.hour.mgmt.application;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
@@ -30,13 +29,17 @@ public class TimecardApplicationService {
     }
 
     public void submit(SubmitTimecardDTO submitTimecardDto) {
-        Map<String, List<String>> toBeVerifiedProjectId = Maps.newHashMap();
         List<Effort> efforts = Lists.newArrayList();
 
         submitTimecardDto.getEntries()
                 .forEach(entryDTO ->
-                        efforts.addAll(
-                                buildEffortsAndCollectProjectIds(toBeVerifiedProjectId, entryDTO, submitTimecardDto.getEmployeeId())));
+                        efforts.addAll(buildEfforts(entryDTO, submitTimecardDto.getEmployeeId())));
+
+        Map<String, List<String>> toBeVerifiedProjectId = efforts.stream()
+                .collect(Collectors
+                        .toMap(Effort::getProjectId,
+                                e -> Lists.newArrayList(e.getSubProjectId()),
+                                this::mergeValueList));
 
         Map<String, List<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 
@@ -47,21 +50,17 @@ public class TimecardApplicationService {
         this.timecardService.saveAll(efforts);
     }
 
-    //todo remove toBeVerifiedProjectId parameter
-    private List<Effort> buildEffortsAndCollectProjectIds(Map<String, List<String>> toBeVerifiedProjectId, EntryDTO entryDTO, String employeeId) {
+    private List<String> mergeValueList(List<String> oldValue, List<String> newValue) {
+        oldValue.addAll(newValue);
+        return oldValue;
+    }
+
+    private List<Effort> buildEfforts(EntryDTO entryDTO, String employeeId) {
         List<Effort> efforts = Lists.newArrayList();
         entryDTO.getSubEntries().forEach(
-                subEntryDTO -> {
-                    String subProjectId = subEntryDTO.getSubProjectId();
-                    String projectId = entryDTO.getProjectId();
-                    if (toBeVerifiedProjectId.containsKey(projectId)) {
-                        toBeVerifiedProjectId.get(projectId).add(subProjectId);
-                    } else {
-                        toBeVerifiedProjectId.putIfAbsent(projectId,
-                                Lists.newArrayList(subProjectId));
-                    }
-                    efforts.addAll(buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO, projectId));
-                });
+                subEntryDTO -> efforts.addAll(
+                        buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO, entryDTO.getProjectId())
+                ));
 
         return efforts;
     }
