@@ -10,7 +10,6 @@ import working.hour.mgmt.application.dto.SubmitTimecardDTO;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-//todo rename TimeCard to timecard word
 public class TimecardController {
 
     private final TimecardApplicationService timecardApplicationService;
@@ -21,7 +20,7 @@ public class TimecardController {
 
     @PostMapping("/timecards/submit")
     @ResponseStatus(OK)
-    public void submitTimeCard(@RequestBody SubmitTimecardDTO submitTimecardDto) {
+    public void submitTimecard(@RequestBody SubmitTimecardDTO submitTimecardDto) {
         timecardApplicationService.submit(submitTimecardDto);
     }
 

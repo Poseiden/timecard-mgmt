@@ -25,8 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TimecardControllerTest extends BaseTest {
     @Autowired
-    //todo rename class name
-    private EffortRepoJPA effortDBRepo;
+    private EffortRepoJPA effortRepoJPA;
 
     @MockBean
     private ProjectService projectService;
@@ -45,21 +44,20 @@ public class TimecardControllerTest extends BaseTest {
                 .andDo(print());
 
         //then
-        Effort effortInDB = effortDBRepo.findAll().get(0);
+        Effort ActualEffort = effortRepoJPA.findAll().get(0);
 
         //todo rename to expect...
-        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
-        EffortDTO effortDTO = subEntryDTO.getEfforts().get(0);
+        SubEntryDTO expectSubEntry = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
+        EffortDTO expectEffort = expectSubEntry.getEfforts().get(0);
 
-        //todo 交互expect与actual的顺序
         //todo to extract assert method
-        assertEquals(effortInDB.getEmployeeId(), submitTimeCardDTO.getEmployeeId());
-        assertEquals(effortInDB.getLocationId(), subEntryDTO.getLocationCode());
-        assertEquals(effortInDB.getNote(), effortDTO.getNote());
-        assertEquals(effortInDB.getSubProjectId(), subEntryDTO.getSubProjectId());
-        assertEquals(effortInDB.getWorkingDay().toString(), effortDTO.getDate());
-        assertEquals(effortInDB.getWorkingHours(), effortDTO.getWorkingHours());
-        assertEquals(effortInDB.isBillable(), subEntryDTO.isBillable());
+        assertEquals(submitTimeCardDTO.getEmployeeId(), ActualEffort.getEmployeeId());
+        assertEquals(expectSubEntry.getLocationCode(), ActualEffort.getLocationId());
+        assertEquals(expectEffort.getNote(), ActualEffort.getNote());
+        assertEquals(expectSubEntry.getSubProjectId(), ActualEffort.getSubProjectId());
+        assertEquals(expectEffort.getDate(), ActualEffort.getWorkingDay().toString());
+        assertEquals(expectEffort.getWorkingHours(), ActualEffort.getWorkingHours());
+        assertEquals(expectSubEntry.isBillable(), ActualEffort.isBillable());
 
     }
 
