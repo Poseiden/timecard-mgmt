@@ -7,10 +7,10 @@ import working.hour.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import java.util.List;
 
 @Service
-public class TimeCardService {
+public class TimecardService {
     private final EffortRepository effortRepository;
 
-    public TimeCardService(EffortRepository effortRepository) {
+    public TimecardService(EffortRepository effortRepository) {
         this.effortRepository = effortRepository;
     }
 

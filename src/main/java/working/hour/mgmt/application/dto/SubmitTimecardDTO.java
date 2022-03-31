@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class SubmitTimeCardDTO {
+public class SubmitTimecardDTO {
     @NonNull
     private String employeeId;
 

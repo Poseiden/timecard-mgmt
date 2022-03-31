@@ -9,10 +9,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
-import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
+import working.hour.mgmt.application.dto.SubmitTimecardDTO;
 import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
 import working.hour.mgmt.domain.service.ProjectService;
-import working.hour.mgmt.domain.service.TimeCardService;
+import working.hour.mgmt.domain.service.TimecardService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,21 +26,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TimeCardApplicationServiceTest {
+public class TimecardApplicationServiceTest {
     @Mock
     private ProjectService projectService;
     @Mock
-    private TimeCardService timeCardService;
+    private TimecardService timeCardService;
 
     @Test
     public void should_save_all_efforts_when_request() {
         //given
-        TimeCardApplicationService timeCardApplicationService = new TimeCardApplicationService(timeCardService, projectService);
+        TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(timeCardService, projectService);
         when(this.projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
         doNothing().when(this.timeCardService).saveAll(isA(List.class));
 
         //when
-        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();
+        SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();
         timeCardApplicationService.submit(submitTimeCardDTO);
 
         //then
@@ -63,8 +63,8 @@ public class TimeCardApplicationServiceTest {
         verify(this.timeCardService, times(1)).saveAll(Lists.newArrayList(effort));
     }
 
-    private SubmitTimeCardDTO buildSubmitTimeCardDTOData() {
-        SubmitTimeCardDTO submitTimeCardDTO = new SubmitTimeCardDTO();
+    private SubmitTimecardDTO buildSubmitTimeCardDTOData() {
+        SubmitTimecardDTO submitTimeCardDTO = new SubmitTimecardDTO();
         submitTimeCardDTO.setEmployeeId("employeeId");
 
         EntryDTO entryDTO = new EntryDTO();

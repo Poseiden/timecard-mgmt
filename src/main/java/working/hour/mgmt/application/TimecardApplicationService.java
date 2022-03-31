@@ -5,11 +5,11 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
-import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
+import working.hour.mgmt.application.dto.SubmitTimecardDTO;
 import working.hour.mgmt.domain.common.exception.BusinessException;
 import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
 import working.hour.mgmt.domain.service.ProjectService;
-import working.hour.mgmt.domain.service.TimeCardService;
+import working.hour.mgmt.domain.service.TimecardService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,16 +19,16 @@ import java.util.stream.Collectors;
 import static working.hour.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
 
 @Service
-public class TimeCardApplicationService {
-    private final TimeCardService timeCardService;
+public class TimecardApplicationService {
+    private final TimecardService timecardService;
     private final ProjectService projectService;
 
-    public TimeCardApplicationService(TimeCardService timeCardService, ProjectService projectService) {
-        this.timeCardService = timeCardService;
+    public TimecardApplicationService(TimecardService timecardService, ProjectService projectService) {
+        this.timecardService = timecardService;
         this.projectService = projectService;
     }
 
-    public void submit(SubmitTimeCardDTO submitTimeCardDto) {
+    public void submit(SubmitTimecardDTO submitTimeCardDto) {
         Map<String, List<String>> toBeVerifiedProjectId = Maps.newHashMap();
         List<Effort> efforts = Lists.newArrayList();
 
@@ -43,7 +43,7 @@ public class TimeCardApplicationService {
             throw new BusinessException(PROJECT_NOT_EXISTS);
         }
 
-        this.timeCardService.saveAll(efforts);
+        this.timecardService.saveAll(efforts);
     }
 
     //todo remove toBeVerifiedProjectId parameter

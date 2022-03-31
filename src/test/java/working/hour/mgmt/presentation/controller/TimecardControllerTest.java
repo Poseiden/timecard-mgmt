@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
-import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
+import working.hour.mgmt.application.dto.SubmitTimecardDTO;
 import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
 import working.hour.mgmt.domain.service.ProjectService;
 import working.hour.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TimeCardControllerTest extends BaseTest {
+public class TimecardControllerTest extends BaseTest {
     @Autowired
     //todo rename class name
     private EffortRepoJPA effortDBRepo;
@@ -37,7 +37,7 @@ public class TimeCardControllerTest extends BaseTest {
         when(projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
 
         //when
-        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
+        SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
         this.mockMvc.perform(post("/timecards/submit")
                         .contentType("application/json")
                         .content(JSON.toJSONString(submitTimeCardDTO)))
@@ -63,8 +63,8 @@ public class TimeCardControllerTest extends BaseTest {
 
     }
 
-    private SubmitTimeCardDTO buildSubmitTimeCardDTO() {
-        SubmitTimeCardDTO submitTimeCardDTO = new SubmitTimeCardDTO();
+    private SubmitTimecardDTO buildSubmitTimeCardDTO() {
+        SubmitTimecardDTO submitTimeCardDTO = new SubmitTimecardDTO();
         submitTimeCardDTO.setEmployeeId("employeeId");
 
         EntryDTO entryDTO = new EntryDTO();
