@@ -32,7 +32,7 @@ public class TimecardApplicationService {
         List<Effort> toBeSavedEfforts = Lists.newArrayList();
         submitTimecardDto.getEntries()
                 .forEach(entryDTO ->
-                        toBeSavedEfforts.addAll(buildEfforts(entryDTO, submitTimecardDto.getEmployeeId())));
+                        toBeSavedEfforts.addAll(collectEffortsFromSubEntryDtos(entryDTO, submitTimecardDto.getEmployeeId())));
 
         Map<String, List<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
                 .collect(Collectors
@@ -58,11 +58,11 @@ public class TimecardApplicationService {
         return oldValue;
     }
 
-    private List<Effort> buildEfforts(EntryDTO entryDTO, String employeeId) {
+    private List<Effort> collectEffortsFromSubEntryDtos(EntryDTO entryDTO, String employeeId) {
         List<Effort> efforts = Lists.newArrayList();
         entryDTO.getSubEntries().forEach(
                 subEntryDTO -> efforts.addAll(
-                        buildEffortsAccordingToEffortDTO(
+                        buildEffortsFromEffortDtos(
                                 employeeId,
                                 subEntryDTO,
                                 entryDTO.getProjectId())
@@ -71,7 +71,7 @@ public class TimecardApplicationService {
         return efforts;
     }
 
-    private List<Effort> buildEffortsAccordingToEffortDTO(String employeeId, SubEntryDTO subEntryDTO, String projectId) {
+    private List<Effort> buildEffortsFromEffortDtos(String employeeId, SubEntryDTO subEntryDTO, String projectId) {
         return subEntryDTO.getEfforts().stream()
                 .map(effortDTO -> new Effort(employeeId,
                         LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
