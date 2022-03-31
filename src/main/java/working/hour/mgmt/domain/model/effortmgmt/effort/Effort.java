@@ -1,4 +1,4 @@
-package working.hour.mgmt.domain.model.working_hour_mgmt.effort;
+package working.hour.mgmt.domain.model.effortmgmt.effort;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +30,8 @@ public class Effort {
     private String note;
 
     private String subProjectId;
+    //todo to add status field
+    //todo to add projectId
 
     public Effort(String employeeId, LocalDate workingDay, int workingHours, String locationId,
                   boolean billable, String note, String subProjectId) {

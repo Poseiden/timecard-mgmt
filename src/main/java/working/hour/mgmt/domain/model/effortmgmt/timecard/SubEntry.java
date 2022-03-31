@@ -1,4 +1,4 @@
-package working.hour.mgmt.domain.model.staff_mgmt.employee;
+package working.hour.mgmt.domain.model.effortmgmt.timecard;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,11 +9,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+@AllArgsConstructor
+public class SubEntry {
     private String id;
-    private List<String> assignmentIdList;
+    private String locationId;
+    private boolean billable;
+    private String note;
     private List<String> effortIdList;
-    private List<String> timeCardIdList;
 }

@@ -35,6 +35,7 @@ dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.4'
+    testImplementation 'com.h2database:h2:2.1.210'
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor "org.projectlombok:lombok:1.18.22"

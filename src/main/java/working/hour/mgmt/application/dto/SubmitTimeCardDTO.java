@@ -13,5 +13,7 @@ public class SubmitTimeCardDTO {
     private String employeeId;
 
     @NonNull
-    List<EntryDTO> entryDTOList;
+    List<EntryDTO> entries;
+
+    //todo change xxxList to xxxs
 }

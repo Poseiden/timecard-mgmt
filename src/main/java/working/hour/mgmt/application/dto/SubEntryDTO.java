@@ -16,5 +16,5 @@ public class SubEntryDTO {
     @NonNull
     private String locationCode;
     @NonNull
-    private List<EffortDTO> effortDTOList;
+    private List<EffortDTO> efforts;
 }

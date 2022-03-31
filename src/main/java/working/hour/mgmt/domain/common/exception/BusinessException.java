@@ -1,4 +1,4 @@
-package working.hour.mgmt.domain.common;
+package working.hour.mgmt.domain.common.exception;
 
 import lombok.Getter;
 import org.apache.logging.log4j.util.Strings;

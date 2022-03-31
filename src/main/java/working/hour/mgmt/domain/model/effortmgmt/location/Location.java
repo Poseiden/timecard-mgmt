@@ -1,4 +1,4 @@
-package working.hour.mgmt.domain.model.working_hour_mgmt.location;
+package working.hour.mgmt.domain.model.effortmgmt.location;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

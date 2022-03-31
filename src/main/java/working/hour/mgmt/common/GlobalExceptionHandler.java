@@ -1,22 +1,21 @@
-package working.hour.mgmt.domain.common;
+package working.hour.mgmt.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import working.hour.mgmt.domain.common.exception.BusinessException;
 
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity handleException(Exception e) {
-        log.error(String.format("Exception: %s", e.getMessage()), e);
         if (e instanceof BusinessException) {
             BusinessException businessException = (BusinessException) e;
+
             return ResponseEntity.status(businessException.getHttpStatus())
                     .body(ExceptionDetail.fromException(businessException));
         }

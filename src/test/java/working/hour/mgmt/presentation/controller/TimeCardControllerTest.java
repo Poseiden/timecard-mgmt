@@ -1,18 +1,18 @@
 package working.hour.mgmt.presentation.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletResponse;
 import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
-import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
-import working.hour.mgmt.domain.service.ProjectProxy;
-import working.hour.mgmt.infrastructure.persistence.hibernate.EffortDBRepo;
+import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
+import working.hour.mgmt.domain.service.ProjectService;
+import working.hour.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;
 
 import java.time.LocalDate;
 
@@ -20,46 +20,50 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TimeCardControllerTest extends BaseTest {
     @Autowired
-    private EffortDBRepo effortDBRepo;
+    //todo rename class name
+    private EffortRepoJPA effortDBRepo;
 
     @MockBean
-    private ProjectProxy projectProxy;
+    private ProjectService projectService;
 
     @Test
     public void should_return_success_when_submit_time_card() throws Exception {
         //given
-        when(projectProxy.verifyProjectsExist(any())).thenReturn(null);
+        when(projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
 
         //when
-        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();
-        MockHttpServletResponse response = this.mockMvc
-                .perform(post("/effortentries/submit")
+        SubmitTimeCardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
+        this.mockMvc.perform(post("/timecards/submit")
                         .contentType("application/json")
                         .content(JSON.toJSONString(submitTimeCardDTO)))
                 .andExpect(status().isOk())
-                .andReturn().getResponse();
+                .andDo(print());
 
         //then
-        Effort effort = effortDBRepo.findAll().get(0);
+        Effort effortInDB = effortDBRepo.findAll().get(0);
 
-        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntryDTOList().get(0).getSubEntryDTOList().get(0);
-        EffortDTO effortDTO = subEntryDTO.getEffortDTOList().get(0);
+        //todo rename to expect...
+        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
+        EffortDTO effortDTO = subEntryDTO.getEfforts().get(0);
 
-        assertEquals(effort.getEmployeeId(), submitTimeCardDTO.getEmployeeId());
-        assertEquals(effort.getLocationId(), subEntryDTO.getLocationCode());
-        assertEquals(effort.getNote(), effortDTO.getNote());
-        assertEquals(effort.getSubProjectId(), subEntryDTO.getSubProjectId());
-        assertEquals(effort.getWorkingDay().toString(), effortDTO.getDate());
-        assertEquals(effort.getWorkingHours(), effortDTO.getWorkingHours());
-        assertEquals(effort.isBillable(), subEntryDTO.isBillable());
+        //todo 交互expect与actual的顺序
+        //todo to extract assert method
+        assertEquals(effortInDB.getEmployeeId(), submitTimeCardDTO.getEmployeeId());
+        assertEquals(effortInDB.getLocationId(), subEntryDTO.getLocationCode());
+        assertEquals(effortInDB.getNote(), effortDTO.getNote());
+        assertEquals(effortInDB.getSubProjectId(), subEntryDTO.getSubProjectId());
+        assertEquals(effortInDB.getWorkingDay().toString(), effortDTO.getDate());
+        assertEquals(effortInDB.getWorkingHours(), effortDTO.getWorkingHours());
+        assertEquals(effortInDB.isBillable(), subEntryDTO.isBillable());
 
     }
 
-    private SubmitTimeCardDTO buildSubmitTimeCardDTOData() {
+    private SubmitTimeCardDTO buildSubmitTimeCardDTO() {
         SubmitTimeCardDTO submitTimeCardDTO = new SubmitTimeCardDTO();
         submitTimeCardDTO.setEmployeeId("employeeId");
 
@@ -76,9 +80,9 @@ public class TimeCardControllerTest extends BaseTest {
         subEntryDTO.setLocationCode("CN");
         subEntryDTO.setSubProjectId("subprojectID");
 
-        subEntryDTO.setEffortDTOList(Lists.newArrayList(effortDTO));
-        entryDTO.setSubEntryDTOList(Lists.newArrayList(subEntryDTO));
-        submitTimeCardDTO.setEntryDTOList(Lists.newArrayList(entryDTO));
+        subEntryDTO.setEfforts(Lists.newArrayList(effortDTO));
+        entryDTO.setSubEntries(Lists.newArrayList(subEntryDTO));
+        submitTimeCardDTO.setEntries(Lists.newArrayList(entryDTO));
 
         return submitTimeCardDTO;
     }

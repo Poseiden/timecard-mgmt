@@ -10,8 +10,8 @@ import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimeCardDTO;
-import working.hour.mgmt.domain.model.working_hour_mgmt.effort.Effort;
-import working.hour.mgmt.domain.service.ProjectProxy;
+import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
+import working.hour.mgmt.domain.service.ProjectService;
 import working.hour.mgmt.domain.service.TimeCardService;
 
 import java.time.LocalDate;
@@ -28,15 +28,15 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TimeCardApplicationServiceTest {
     @Mock
-    private ProjectProxy projectProxy;
+    private ProjectService projectService;
     @Mock
     private TimeCardService timeCardService;
 
     @Test
     public void should_save_all_efforts_when_request() {
         //given
-        TimeCardApplicationService timeCardApplicationService = new TimeCardApplicationService(timeCardService, projectProxy);
-        when(this.projectProxy.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
+        TimeCardApplicationService timeCardApplicationService = new TimeCardApplicationService(timeCardService, projectService);
+        when(this.projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
         doNothing().when(this.timeCardService).saveAll(isA(List.class));
 
         //when
@@ -44,8 +44,8 @@ public class TimeCardApplicationServiceTest {
         timeCardApplicationService.submit(submitTimeCardDTO);
 
         //then
-        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntryDTOList().get(0).getSubEntryDTOList().get(0);
-        EffortDTO effortDTO = subEntryDTO.getEffortDTOList().get(0);
+        SubEntryDTO subEntryDTO = submitTimeCardDTO.getEntries().get(0).getSubEntries().get(0);
+        EffortDTO effortDTO = subEntryDTO.getEfforts().get(0);
 
         Effort effort = new Effort();
         effort.setEmployeeId(submitTimeCardDTO.getEmployeeId());
@@ -57,9 +57,9 @@ public class TimeCardApplicationServiceTest {
         effort.setBillable(subEntryDTO.isBillable());
 
         Map<String, List<String>> projectIdMap = Maps.newHashMap();
-        projectIdMap.put(submitTimeCardDTO.getEntryDTOList().get(0).getProjectId(), Lists.newArrayList(subEntryDTO.getSubProjectId()));
+        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(subEntryDTO.getSubProjectId()));
 
-        verify(this.projectProxy, times(1)).verifyProjectsExist(projectIdMap);
+        verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
         verify(this.timeCardService, times(1)).saveAll(Lists.newArrayList(effort));
     }
 
@@ -80,9 +80,9 @@ public class TimeCardApplicationServiceTest {
         subEntryDTO.setLocationCode("CN");
         subEntryDTO.setSubProjectId("subprojectID");
 
-        subEntryDTO.setEffortDTOList(Lists.newArrayList(effortDTO));
-        entryDTO.setSubEntryDTOList(Lists.newArrayList(subEntryDTO));
-        submitTimeCardDTO.setEntryDTOList(Lists.newArrayList(entryDTO));
+        subEntryDTO.setEfforts(Lists.newArrayList(effortDTO));
+        entryDTO.setSubEntries(Lists.newArrayList(subEntryDTO));
+        submitTimeCardDTO.setEntries(Lists.newArrayList(entryDTO));
 
         return submitTimeCardDTO;
     }

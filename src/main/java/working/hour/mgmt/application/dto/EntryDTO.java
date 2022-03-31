@@ -12,5 +12,5 @@ public class EntryDTO {
     @NonNull
     private String projectId;
     @NonNull
-    private List<SubEntryDTO> subEntryDTOList;
+    private List<SubEntryDTO> subEntries;
 }
