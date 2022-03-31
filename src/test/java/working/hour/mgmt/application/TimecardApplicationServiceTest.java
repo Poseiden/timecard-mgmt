@@ -44,26 +44,25 @@ public class TimecardApplicationServiceTest {
         timeCardApplicationService.submit(submitTimeCardDTO);
 
         //then
-        //todo to change name to actual....
-        EntryDTO entryDTO = submitTimeCardDTO.getEntries().get(0);
-        SubEntryDTO subEntryDTO = entryDTO.getSubEntries().get(0);
-        EffortDTO effortDTO = subEntryDTO.getEfforts().get(0);
+        EntryDTO expectEntry = submitTimeCardDTO.getEntries().get(0);
+        SubEntryDTO expectSubEntryDTO = expectEntry.getSubEntries().get(0);
+        EffortDTO expectEffortDTO = expectSubEntryDTO.getEfforts().get(0);
 
-        Effort effort = new Effort();
-        effort.setEmployeeId(submitTimeCardDTO.getEmployeeId());
-        effort.setLocationId(subEntryDTO.getLocationCode());
-        effort.setNote(effortDTO.getNote());
-        effort.setSubProjectId(subEntryDTO.getSubProjectId());
-        effort.setWorkingDay(LocalDate.parse(effortDTO.getDate()));
-        effort.setWorkingHours(effortDTO.getWorkingHours());
-        effort.setBillable(subEntryDTO.isBillable());
-        effort.setProjectId(entryDTO.getProjectId());
+        Effort expectEffort = new Effort();
+        expectEffort.setEmployeeId(submitTimeCardDTO.getEmployeeId());
+        expectEffort.setLocationId(expectSubEntryDTO.getLocationCode());
+        expectEffort.setNote(expectEffortDTO.getNote());
+        expectEffort.setSubProjectId(expectSubEntryDTO.getSubProjectId());
+        expectEffort.setWorkingDay(LocalDate.parse(expectEffortDTO.getDate()));
+        expectEffort.setWorkingHours(expectEffortDTO.getWorkingHours());
+        expectEffort.setBillable(expectSubEntryDTO.isBillable());
+        expectEffort.setProjectId(expectEntry.getProjectId());
 
         Map<String, List<String>> projectIdMap = Maps.newHashMap();
-        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(subEntryDTO.getSubProjectId()));
+        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(expectSubEntryDTO.getSubProjectId()));
 
         verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
-        verify(this.timeCardService, times(1)).saveAll(Lists.newArrayList(effort));
+        verify(this.timeCardService, times(1)).saveAll(Lists.newArrayList(expectEffort));
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTOData() {
