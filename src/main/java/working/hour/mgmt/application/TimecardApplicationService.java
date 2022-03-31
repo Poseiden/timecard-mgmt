@@ -29,25 +29,28 @@ public class TimecardApplicationService {
     }
 
     public void submit(SubmitTimecardDTO submitTimecardDto) {
-        List<Effort> efforts = Lists.newArrayList();
-
+        List<Effort> toBeSavedEfforts = Lists.newArrayList();
         submitTimecardDto.getEntries()
                 .forEach(entryDTO ->
-                        efforts.addAll(buildEfforts(entryDTO, submitTimecardDto.getEmployeeId())));
+                        toBeSavedEfforts.addAll(buildEfforts(entryDTO, submitTimecardDto.getEmployeeId())));
 
-        Map<String, List<String>> toBeVerifiedProjectId = efforts.stream()
+        Map<String, List<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
                                 e -> Lists.newArrayList(e.getSubProjectId()),
                                 this::mergeValueList));
 
+        verifyProjectIdsExist(toBeVerifiedProjectId);
+
+        this.timecardService.saveAll(toBeSavedEfforts);
+    }
+
+    private void verifyProjectIdsExist(Map<String, List<String>> toBeVerifiedProjectId) {
         Map<String, List<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 
         if (!notExistsProjectIds.isEmpty()) {
             throw new BusinessException(PROJECT_NOT_EXISTS);
         }
-
-        this.timecardService.saveAll(efforts);
     }
 
     private List<String> mergeValueList(List<String> oldValue, List<String> newValue) {
@@ -59,7 +62,10 @@ public class TimecardApplicationService {
         List<Effort> efforts = Lists.newArrayList();
         entryDTO.getSubEntries().forEach(
                 subEntryDTO -> efforts.addAll(
-                        buildEffortsAccordingToEffortDTO(employeeId, subEntryDTO, entryDTO.getProjectId())
+                        buildEffortsAccordingToEffortDTO(
+                                employeeId,
+                                subEntryDTO,
+                                entryDTO.getProjectId())
                 ));
 
         return efforts;
