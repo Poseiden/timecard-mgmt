@@ -1,8 +1,8 @@
 package working.hour.mgmt.domain.service;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface ProjectService {
-    Map<String, List<String>> verifyProjectsExist(Map<String, List<String>> toBeVerifiedProjectId);
+    Map<String, Set<String>> verifyProjectsExist(Map<String, Set<String>> toBeVerifiedProjectId);
 }

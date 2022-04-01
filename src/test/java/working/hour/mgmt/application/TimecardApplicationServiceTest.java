@@ -1,6 +1,7 @@
 package working.hour.mgmt.application;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import working.hour.mgmt.domain.service.TimecardService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
@@ -60,8 +62,8 @@ public class TimecardApplicationServiceTest {
         expectEffort.setProjectId(expectEntry.getProjectId());
         expectEffort.setEffortStatus(SUBMITTED);
 
-        Map<String, List<String>> projectIdMap = Maps.newHashMap();
-        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Lists.newArrayList(expectSubEntryDTO.getSubProjectId()));
+        Map<String, Set<String>> projectIdMap = Maps.newHashMap();
+        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
 
         verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
         verify(this.timeCardService, times(1)).saveAll(Lists.newArrayList(expectEffort));

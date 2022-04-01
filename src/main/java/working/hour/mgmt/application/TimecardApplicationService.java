@@ -1,6 +1,7 @@
 package working.hour.mgmt.application;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
@@ -13,6 +14,7 @@ import working.hour.mgmt.domain.service.TimecardService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static working.hour.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
@@ -34,10 +36,10 @@ public class TimecardApplicationService {
                 .forEach(entryDTO ->
                         toBeSavedEfforts.addAll(collectEffortsFromSubEntryDtos(entryDTO, submitTimecardDto.getEmployeeId())));
 
-        Map<String, List<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
+        Map<String, Set<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
-                                effort -> Lists.newArrayList(effort.getSubProjectId()),
+                                effort -> Sets.newHashSet(effort.getSubProjectId()),
                                 this::mergeValueList));
 
         verifyProjectIdsExist(toBeVerifiedProjectId);
@@ -45,15 +47,15 @@ public class TimecardApplicationService {
         this.timecardService.saveAll(toBeSavedEfforts);
     }
 
-    private void verifyProjectIdsExist(Map<String, List<String>> toBeVerifiedProjectId) {
-        Map<String, List<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
+    private void verifyProjectIdsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
+        Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 
         if (!notExistsProjectIds.isEmpty()) {
             throw new BusinessException(PROJECT_NOT_EXISTS);
         }
     }
 
-    private List<String> mergeValueList(List<String> oldValue, List<String> newValue) {
+    private Set<String> mergeValueList(Set<String> oldValue, Set<String> newValue) {
         oldValue.addAll(newValue);
         return oldValue;
     }
