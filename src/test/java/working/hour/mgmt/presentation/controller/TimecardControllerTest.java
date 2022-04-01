@@ -3,6 +3,7 @@ package working.hour.mgmt.presentation.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import org.assertj.core.util.Lists;
+import org.assertj.core.util.Sets;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,13 +16,19 @@ import working.hour.mgmt.domain.service.ProjectService;
 import working.hour.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;
 
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static working.hour.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
 
 public class TimecardControllerTest extends BaseTest {
     @Autowired
@@ -38,10 +45,9 @@ public class TimecardControllerTest extends BaseTest {
         //when
         SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
         this.mockMvc.perform(post("/timecards/submit")
-                        .contentType("application/json")
+                        .contentType(APPLICATION_JSON)
                         .content(JSON.toJSONString(submitTimeCardDTO)))
-                .andExpect(status().isOk())
-                .andDo(print());
+                .andExpect(status().isOk());
 
         //then
         Effort ActualEffort = effortRepoJPA.findAll().get(0);
@@ -51,7 +57,25 @@ public class TimecardControllerTest extends BaseTest {
         EffortDTO expectEffort = expectSubEntry.getEfforts().get(0);
 
         assertEffort(ActualEffort, expectSubEntry, expectEffort, submitTimeCardDTO.getEmployeeId(), expectEntry.getProjectId());
+    }
 
+    @Test
+    public void should_return_project_not_exists_when_project_id_in_timecard_not_exist() throws Exception {
+        //given
+        Map<String, Set<String>> errorProjectIdMap =  Maps.newHashMap();
+        errorProjectIdMap.put("some not exist project ids", Sets.newHashSet());
+        when(projectService.verifyProjectsExist(any())).thenReturn(errorProjectIdMap);
+
+        //when
+        SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
+        this.mockMvc.perform(post("/timecards/submit")
+                .contentType(APPLICATION_JSON)
+                .content(JSON.toJSONString(submitTimeCardDTO)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.error", is(PROJECT_NOT_EXISTS.toString())));
+
+        //then
+        assertTrue(effortRepoJPA.findAll().isEmpty());
     }
 
     private void assertEffort(Effort actualEffort, SubEntryDTO expectSubEntry, EffortDTO expectEffort,
