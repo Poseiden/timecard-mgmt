@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS working_hour_mgmt;
+CREATE DATABASE IF NOT EXISTS timecard_mgmt;

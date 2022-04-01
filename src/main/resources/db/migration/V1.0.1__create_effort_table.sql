@@ -1,9 +1,9 @@
-create table working_hour_mgmt.location
+create table timecard_mgmt.location
 (
     id varchar(255) not null primary key
 );
 
-create table working_hour_mgmt.effort
+create table timecard_mgmt.effort
 (
     id varchar(255) not null primary key,
     date datetime(6) not null ,
@@ -11,6 +11,6 @@ create table working_hour_mgmt.effort
     billable boolean not null,
     note varchar(255),
     location_id varchar(255) not null ,
-    FOREIGN KEY (location_id) REFERENCES working_hour_mgmt.location(id)
+    FOREIGN KEY (location_id) REFERENCES timecard_mgmt.location(id)
 );
 
