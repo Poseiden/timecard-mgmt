@@ -1,4 +1,4 @@
-package working.hour.mgmt.presentation.controller;
+package working.hour.mgmt.base;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
