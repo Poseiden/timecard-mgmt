@@ -44,5 +44,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'working.hour.mgmt.App'
+    mainClass = 'timecard.mgmt.App'
 }
