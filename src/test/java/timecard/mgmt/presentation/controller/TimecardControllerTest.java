@@ -7,10 +7,10 @@ import org.assertj.core.util.Sets;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import timecard.mgmt.application.dto.EffortDTO;
 import timecard.mgmt.application.dto.EntryDTO;
 import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
-import timecard.mgmt.application.dto.EffortDTO;
 import timecard.mgmt.base.APIBaseTest;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.service.ProjectService;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static timecard.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
 
-public class TimecardControllerTestAPI extends APIBaseTest {
+public class TimecardControllerTest extends APIBaseTest {
     @Autowired
     private EffortRepoJPA effortRepoJPA;
 
@@ -39,7 +39,7 @@ public class TimecardControllerTestAPI extends APIBaseTest {
     private ProjectService projectService;
 
     @Test
-    public void should_return_success_when_submit_time_card() throws Exception {
+    public void should_return_success_when_submit_timecard() throws Exception {
         //given
         when(projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
 
@@ -61,7 +61,7 @@ public class TimecardControllerTestAPI extends APIBaseTest {
     }
 
     @Test
-    public void should_return_project_not_exists_when_project_id_in_timecard_not_exist() throws Exception {
+    public void should_return_project_not_exists_when_project_id_in_timecard_not_exists() throws Exception {
         //given
         Map<String, Set<String>> errorProjectIdMap =  Maps.newHashMap();
         errorProjectIdMap.put("some not exist project ids", Sets.newHashSet());
