@@ -11,7 +11,7 @@ import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimecardDTO;
-import working.hour.mgmt.base.BaseTest;
+import working.hour.mgmt.base.APIBaseTest;
 import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
 import working.hour.mgmt.domain.service.ProjectService;
 import working.hour.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static working.hour.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
 
-public class TimecardControllerTest extends BaseTest {
+public class TimecardControllerTestAPI extends APIBaseTest {
     @Autowired
     private EffortRepoJPA effortRepoJPA;
 

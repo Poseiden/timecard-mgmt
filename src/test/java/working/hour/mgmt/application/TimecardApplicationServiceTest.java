@@ -4,14 +4,13 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import working.hour.mgmt.application.dto.EffortDTO;
 import working.hour.mgmt.application.dto.EntryDTO;
 import working.hour.mgmt.application.dto.SubEntryDTO;
 import working.hour.mgmt.application.dto.SubmitTimecardDTO;
 import working.hour.mgmt.application.service.TimecardApplicationService;
+import working.hour.mgmt.base.UnitBaseTest;
 import working.hour.mgmt.domain.common.exception.BusinessException;
 import working.hour.mgmt.domain.model.effortmgmt.effort.Effort;
 import working.hour.mgmt.domain.service.ProjectService;
@@ -31,8 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static working.hour.mgmt.domain.model.effortmgmt.effort.EffortStatus.SUBMITTED;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TimecardApplicationServiceTest {
+public class TimecardApplicationServiceTest extends UnitBaseTest {
     @Mock
     private ProjectService projectService;
     @Mock

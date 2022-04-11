@@ -15,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles(profiles = "test")
 @Transactional
-public abstract class BaseTest {
+public abstract class APIBaseTest {
     @Autowired
     private WebApplicationContext wac;
 
