@@ -1,4 +1,4 @@
-package working.hour.mgmt.application;
+package working.hour.mgmt.application.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
