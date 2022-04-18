@@ -1,5 +1,7 @@
 package timecard.mgmt.infrastructure.proxy;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import timecard.mgmt.domain.service.ProjectService;
@@ -14,8 +16,11 @@ public class ProjectServiceProxy implements ProjectService {
     public Map<String, Set<String>> verifyProjectsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
         RestTemplate restTemplate = new RestTemplate();
         //todo to change actual url
-        String url = "/this is url";
+        String url = "http://localhost:8081/projects/batch?projects={projects}";
 
-        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class).getBody().getNotExistsProjectIds();
+        Map<String, String> uriVariables = Maps.newHashMap();
+        uriVariables.put("projects", JSONObject.toJSONString(toBeVerifiedProjectId));
+        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class, uriVariables).getBody()
+                .getNotExistsProjectIds();
     }
 }

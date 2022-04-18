@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeCard {
+public class Timecard {
     private String id;
     private String employeeId;
     private Period period;
