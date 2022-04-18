@@ -15,8 +15,7 @@ public class ProjectServiceProxy implements ProjectService {
     @Override
     public Map<String, Set<String>> verifyProjectsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
         RestTemplate restTemplate = new RestTemplate();
-        //todo to change actual url
-        String url = "http://localhost:8081/projects/batch?projects={projects}";
+        String url = "http://localhost:8081/projects/invalid-project-ids?projects={projects}";
 
         Map<String, String> uriVariables = Maps.newHashMap();
         uriVariables.put("projects", JSONObject.toJSONString(toBeVerifiedProjectId));
