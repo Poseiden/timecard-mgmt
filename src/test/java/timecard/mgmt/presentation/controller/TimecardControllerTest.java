@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static timecard.mgmt.domain.common.exception.ErrorKey.PROJECT_NOT_EXISTS;
+import static timecard.mgmt.domain.common.exception.ErrorKey.PROJECTS_OR_SUB_PROJECTS_NOT_EXIST;
 
 public class TimecardControllerTest extends APIBaseTest {
     @Autowired
@@ -73,7 +73,7 @@ public class TimecardControllerTest extends APIBaseTest {
                 .contentType(APPLICATION_JSON)
                 .content(JSON.toJSONString(submitTimeCardDTO)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.error", is(PROJECT_NOT_EXISTS.toString())));
+                .andExpect(jsonPath("$.error", is(PROJECTS_OR_SUB_PROJECTS_NOT_EXIST.toString())));
 
         //then
         assertTrue(effortRepoJPA.findAll().isEmpty());

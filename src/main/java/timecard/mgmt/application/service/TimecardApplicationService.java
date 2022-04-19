@@ -51,7 +51,7 @@ public class TimecardApplicationService {
         Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 
         if (!notExistsProjectIds.isEmpty()) {
-            throw new BusinessException(ErrorKey.PROJECT_NOT_EXISTS);
+            throw new BusinessException(ErrorKey.PROJECTS_OR_SUB_PROJECTS_NOT_EXIST);
         }
     }
 

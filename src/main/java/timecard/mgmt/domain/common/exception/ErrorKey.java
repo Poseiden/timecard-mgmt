@@ -1,5 +1,5 @@
 package timecard.mgmt.domain.common.exception;
 
 public enum  ErrorKey {
-    PROJECT_NOT_EXISTS
+    PROJECTS_OR_SUB_PROJECTS_NOT_EXIST
 }
