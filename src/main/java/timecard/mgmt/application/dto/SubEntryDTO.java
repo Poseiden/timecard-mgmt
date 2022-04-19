@@ -11,7 +11,6 @@ import java.util.List;
 public class SubEntryDTO {
     @NonNull
     private String subProjectId;
-    @NonNull
     private boolean billable;
     @NonNull
     private String locationCode;

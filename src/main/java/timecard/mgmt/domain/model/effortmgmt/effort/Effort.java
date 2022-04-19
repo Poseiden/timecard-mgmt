@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import static javax.persistence.EnumType.STRING;
 
 @Entity
-@Table(name = "effort")
+@Table
 @Data
 @NoArgsConstructor
 public class Effort {

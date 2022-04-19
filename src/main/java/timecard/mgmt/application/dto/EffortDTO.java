@@ -9,7 +9,6 @@ import lombok.NonNull;
 public class EffortDTO {
     @NonNull
     private String date;
-    @NonNull
     private int workingHours;
     @NonNull
     private String note;
