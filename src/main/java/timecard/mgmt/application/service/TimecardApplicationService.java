@@ -9,8 +9,8 @@ import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.domain.common.exception.BusinessException;
 import timecard.mgmt.domain.common.exception.ErrorKey;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
+import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
-import timecard.mgmt.domain.service.TimecardService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,11 +22,11 @@ import static timecard.mgmt.domain.model.effortmgmt.effort.EffortStatus.SUBMITTE
 
 @Service
 public class TimecardApplicationService {
-    private final TimecardService timecardService;
+    private final EffortRepository effortRepository;
     private final ProjectService projectService;
 
-    public TimecardApplicationService(TimecardService timecardService, ProjectService projectService) {
-        this.timecardService = timecardService;
+    public TimecardApplicationService(EffortRepository effortRepository, ProjectService projectService) {
+        this.effortRepository = effortRepository;
         this.projectService = projectService;
     }
 
@@ -44,14 +44,14 @@ public class TimecardApplicationService {
 
         verifyProjectIdsExist(toBeVerifiedProjectId);
 
-        this.timecardService.saveAll(toBeSavedEfforts);
+        this.effortRepository.saveAll(toBeSavedEfforts);
     }
 
     private void verifyProjectIdsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
         Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
 
         if (!notExistsProjectIds.isEmpty()) {
-            throw new BusinessException(ErrorKey.PROJECTS_OR_SUB_PROJECTS_NOT_EXIST);
+            throw new BusinessException(ErrorKey.PROJECTS_OR_SUBPROJECTS_NOT_EXIST);
         }
     }
 

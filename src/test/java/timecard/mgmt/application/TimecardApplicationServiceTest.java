@@ -5,16 +5,16 @@ import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.mockito.Mock;
+import timecard.mgmt.application.dto.EffortDTO;
 import timecard.mgmt.application.dto.EntryDTO;
 import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
-import timecard.mgmt.base.UnitBaseTest;
-import timecard.mgmt.application.dto.EffortDTO;
 import timecard.mgmt.application.service.TimecardApplicationService;
+import timecard.mgmt.base.UnitBaseTest;
 import timecard.mgmt.domain.common.exception.BusinessException;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
+import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
-import timecard.mgmt.domain.service.TimecardService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,14 +34,14 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
     @Mock
     private ProjectService projectService;
     @Mock
-    private TimecardService timecardService;
+    private EffortRepository effortRepository;
 
     @Test
     public void should_save_all_efforts_when_request() {
         //given
-        TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(timecardService, projectService);
+        TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(effortRepository, projectService);
         when(this.projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
-        doNothing().when(this.timecardService).saveAll(isA(List.class));
+        doNothing().when(this.effortRepository).saveAll(isA(List.class));
 
         //when
         SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();
@@ -67,13 +67,13 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
         projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
 
         verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
-        verify(this.timecardService, times(1)).saveAll(Lists.newArrayList(expectEffort));
+        verify(this.effortRepository, times(1)).saveAll(Lists.newArrayList(expectEffort));
     }
 
     @Test(expected = BusinessException.class)
     public void should_throw_exception_when_project_id_not_exists_() {
         //given
-        TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(timecardService, projectService);
+        TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(effortRepository, projectService);
         Map<String, Set<String>> errorResult = Maps.newHashMap();
         errorResult.put("error project id", Sets.newHashSet());
         when(this.projectService.verifyProjectsExist(any())).thenReturn(errorResult);
@@ -89,7 +89,7 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
         projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
 
         verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
-        verify(this.timecardService, never()).saveAll(any());
+        verify(this.effortRepository, never()).saveAll(any());
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTOData() {

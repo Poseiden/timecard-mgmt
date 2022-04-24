@@ -13,6 +13,8 @@ import java.util.Set;
 @Component
 public class ProjectServiceProxy implements ProjectService {
     @Override
+    //todo define a data type for toBeVerifiedProjectId
+    //todo rename SubProject to Subproject
     public Map<String, Set<String>> verifyProjectsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8081/projects/invalid-project-ids?projects={projects}";

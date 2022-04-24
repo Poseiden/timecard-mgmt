@@ -14,5 +14,5 @@ import java.util.List;
 public class Project {
     private String id;
     private List<String> entryIds;
-    private List<SubProject> subProjects;
+    private List<Subproject> subprojects;
 }

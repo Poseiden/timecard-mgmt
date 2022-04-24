@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubProject {
+public class Subproject {
     private String id;
     private List<String> effortIds;
     private List<String> subEntries;
