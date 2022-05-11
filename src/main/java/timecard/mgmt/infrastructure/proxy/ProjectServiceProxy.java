@@ -6,7 +6,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
-import timecard.mgmt.domain.service.ProjectService;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +13,10 @@ import java.util.Map;
 import static org.springframework.http.HttpMethod.GET;
 
 @Component
-public class ProjectServiceProxy implements ProjectService {
+public class ProjectServiceProxy {
     private static final String DOMAIN_NAME = "http://localhost:8081";
     public static final String INVALID_PROJECT_URI = "/projects/invalid-project-ids";
 
-    @Override
     public List<VerifyProjectExistDTO> verifyProjectsExist(List<VerifyProjectExistDTO> verifyProjectExistDTOs) {
         RestTemplate restTemplate = new RestTemplate();
 
