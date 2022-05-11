@@ -11,6 +11,7 @@ import timecard.mgmt.domain.common.exception.ErrorKey;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
+import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,19 +37,25 @@ public class TimecardApplicationService {
                 .forEach(entryDTO ->
                         toBeSavedEfforts.addAll(collectEffortsFromSubEntryDtos(entryDTO, submitTimecardDto.getEmployeeId())));
 
-        Map<String, Set<String>> toBeVerifiedProjectId = toBeSavedEfforts.stream()
+        Map<String, Set<String>> toBeVerifiedProjectIds = toBeSavedEfforts.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
                                 effort -> Sets.newHashSet(effort.getSubProjectId()),
                                 this::mergeValueList));
 
-        verifyProjectIdsExist(toBeVerifiedProjectId);
+
+        List<VerifyProjectExistDTO> toBeVerifiedProjectIds2 = Lists.newArrayList();
+        toBeVerifiedProjectIds.forEach((key, value) -> {
+            toBeVerifiedProjectIds2.add(new VerifyProjectExistDTO(key, value));
+        });
+
+        verifyProjectIdsExist(toBeVerifiedProjectIds2);
 
         this.effortRepository.saveAll(toBeSavedEfforts);
     }
 
-    private void verifyProjectIdsExist(Map<String, Set<String>> toBeVerifiedProjectId) {
-        Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectId);
+    private void verifyProjectIdsExist(List<VerifyProjectExistDTO> toBeVerifiedProjectIds) {
+        Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectIds);
 
         if (!notExistsProjectIds.isEmpty()) {
             throw new BusinessException(ErrorKey.PROJECTS_OR_SUBPROJECTS_NOT_EXIST);

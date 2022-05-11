@@ -15,6 +15,7 @@ import timecard.mgmt.domain.common.exception.BusinessException;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
+import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -63,10 +64,11 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
         expectEffort.setProjectId(expectEntry.getProjectId());
         expectEffort.setEffortStatus(SUBMITTED);
 
-        Map<String, Set<String>> projectIdMap = Maps.newHashMap();
-        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
+        List<VerifyProjectExistDTO> projectIds = Lists.newArrayList();
+        VerifyProjectExistDTO verifyProjectExistDTO = new VerifyProjectExistDTO(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
+        projectIds.add(verifyProjectExistDTO);
 
-        verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
+        verify(this.projectService, times(1)).verifyProjectsExist(projectIds);
         verify(this.effortRepository, times(1)).saveAll(Lists.newArrayList(expectEffort));
     }
 
@@ -85,10 +87,12 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
         //then
         EntryDTO expectEntry = submitTimeCardDTO.getEntries().get(0);
         SubEntryDTO expectSubEntryDTO = expectEntry.getSubEntries().get(0);
-        Map<String, Set<String>> projectIdMap = Maps.newHashMap();
-        projectIdMap.put(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
 
-        verify(this.projectService, times(1)).verifyProjectsExist(projectIdMap);
+        List<VerifyProjectExistDTO> projectIds = Lists.newArrayList();
+        VerifyProjectExistDTO verifyProjectExistDTO = new VerifyProjectExistDTO(submitTimeCardDTO.getEntries().get(0).getProjectId(), Sets.newHashSet(expectSubEntryDTO.getSubProjectId()));
+        projectIds.add(verifyProjectExistDTO);
+
+        verify(this.projectService, times(1)).verifyProjectsExist(projectIds);
         verify(this.effortRepository, never()).saveAll(any());
     }
 
