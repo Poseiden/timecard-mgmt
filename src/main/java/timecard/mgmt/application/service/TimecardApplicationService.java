@@ -37,19 +37,25 @@ public class TimecardApplicationService {
                 .forEach(entryDTO ->
                         toBeSavedEfforts.addAll(collectEffortsFromSubEntryDtos(entryDTO, submitTimecardDto.getEmployeeId())));
 
+        List<VerifyProjectExistDTO> toBeVerifiedProjectIds = buildVerifyProjectExistDTOs(toBeSavedEfforts);
+
+        verifyProjectIdsExist(toBeVerifiedProjectIds);
+
+        this.effortRepository.saveAll(toBeSavedEfforts);
+    }
+
+    private List<VerifyProjectExistDTO> buildVerifyProjectExistDTOs(List<Effort> toBeSavedEfforts) {
+        //planB: compared to use map, groupBy toBeSavedEfforts maybe better
         Map<String, Set<String>> toBeVerifiedProjectIds = toBeSavedEfforts.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
                                 effort -> Sets.newHashSet(effort.getSubProjectId()),
                                 this::mergeValueList));
 
-
-        List<VerifyProjectExistDTO> toBeVerifiedProjectIds2 = Lists.newArrayList();
-        toBeVerifiedProjectIds.forEach((key, value) -> toBeVerifiedProjectIds2.add(new VerifyProjectExistDTO(key, value)));
-
-        verifyProjectIdsExist(toBeVerifiedProjectIds2);
-
-        this.effortRepository.saveAll(toBeSavedEfforts);
+        return toBeVerifiedProjectIds.entrySet()
+                .stream()
+                .map(e -> new VerifyProjectExistDTO(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
     }
 
     private void verifyProjectIdsExist(List<VerifyProjectExistDTO> toBeVerifiedProjectIds) {
