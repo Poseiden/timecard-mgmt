@@ -1,7 +1,6 @@
 package timecard.mgmt.presentation.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 import org.assertj.core.util.Lists;
 import org.assertj.core.util.Sets;
 import org.junit.Test;
@@ -12,13 +11,12 @@ import timecard.mgmt.application.dto.EntryDTO;
 import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.base.APIBaseTest;
+import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.service.ProjectService;
 import timecard.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -41,7 +39,7 @@ public class TimecardControllerTest extends APIBaseTest {
     @Test
     public void should_return_success_when_submit_timecard() throws Exception {
         //given
-        when(projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
+        when(projectService.verifyProjectsExist(any())).thenReturn(Lists.newArrayList());
 
         //when
         SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();
@@ -63,9 +61,8 @@ public class TimecardControllerTest extends APIBaseTest {
     @Test
     public void should_return_project_not_exists_when_project_id_in_timecard_not_exists() throws Exception {
         //given
-        Map<String, Set<String>> errorProjectIdMap =  Maps.newHashMap();
-        errorProjectIdMap.put("some not exist project ids", Sets.newHashSet());
-        when(projectService.verifyProjectsExist(any())).thenReturn(errorProjectIdMap);
+        when(projectService.verifyProjectsExist(any())).
+                thenReturn(Lists.newArrayList(new VerifyProjectExistDTO("some not exist project ids", Sets.newHashSet())));
 
         //when
         SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTO();

@@ -8,10 +8,10 @@ import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.domain.common.exception.BusinessException;
 import timecard.mgmt.domain.common.exception.ErrorKey;
+import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,9 +45,7 @@ public class TimecardApplicationService {
 
 
         List<VerifyProjectExistDTO> toBeVerifiedProjectIds2 = Lists.newArrayList();
-        toBeVerifiedProjectIds.forEach((key, value) -> {
-            toBeVerifiedProjectIds2.add(new VerifyProjectExistDTO(key, value));
-        });
+        toBeVerifiedProjectIds.forEach((key, value) -> toBeVerifiedProjectIds2.add(new VerifyProjectExistDTO(key, value)));
 
         verifyProjectIdsExist(toBeVerifiedProjectIds2);
 
@@ -55,7 +53,7 @@ public class TimecardApplicationService {
     }
 
     private void verifyProjectIdsExist(List<VerifyProjectExistDTO> toBeVerifiedProjectIds) {
-        Map<String, Set<String>> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectIds);
+        List<VerifyProjectExistDTO> notExistsProjectIds = this.projectService.verifyProjectsExist(toBeVerifiedProjectIds);
 
         if (!notExistsProjectIds.isEmpty()) {
             throw new BusinessException(ErrorKey.PROJECTS_OR_SUBPROJECTS_NOT_EXIST);

@@ -1,6 +1,5 @@
 package timecard.mgmt.application;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
@@ -12,15 +11,13 @@ import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.application.service.TimecardApplicationService;
 import timecard.mgmt.base.UnitBaseTest;
 import timecard.mgmt.domain.common.exception.BusinessException;
+import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
@@ -41,7 +38,7 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
     public void should_save_all_efforts_when_request() {
         //given
         TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(effortRepository, projectService);
-        when(this.projectService.verifyProjectsExist(any())).thenReturn(Maps.newHashMap());
+        when(this.projectService.verifyProjectsExist(any())).thenReturn(Lists.newArrayList());
         doNothing().when(this.effortRepository).saveAll(isA(List.class));
 
         //when
@@ -76,9 +73,8 @@ public class TimecardApplicationServiceTest extends UnitBaseTest {
     public void should_throw_exception_when_project_id_not_exists_() {
         //given
         TimecardApplicationService timeCardApplicationService = new TimecardApplicationService(effortRepository, projectService);
-        Map<String, Set<String>> errorResult = Maps.newHashMap();
-        errorResult.put("error project id", Sets.newHashSet());
-        when(this.projectService.verifyProjectsExist(any())).thenReturn(errorResult);
+        when(this.projectService.verifyProjectsExist(any())).
+                thenReturn(Lists.newArrayList(new VerifyProjectExistDTO("error project id", Sets.newHashSet())));
 
         //when
         SubmitTimecardDTO submitTimeCardDTO = buildSubmitTimeCardDTOData();

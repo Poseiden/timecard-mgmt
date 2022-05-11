@@ -2,30 +2,30 @@ package timecard.mgmt.infrastructure.proxy;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import timecard.mgmt.domain.service.ProjectService;
 import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
-import timecard.mgmt.infrastructure.dto.VerifyProjectExistResponse;
+import timecard.mgmt.domain.service.ProjectService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import static org.springframework.http.HttpMethod.GET;
 
 @Component
 public class ProjectServiceProxy implements ProjectService {
     private static final String DOMAIN_NAME = "http://localhost:8081";
+    public static final String INVALID_PROJECT_URI = "/projects/invalid-project-ids";
 
     @Override
-    //todo define a data type for toBeVerifiedProjectId, put it to domain/service
-    //todo rename SubProject to Subproject
-    public Map<String, Set<String>> verifyProjectsExist(List<VerifyProjectExistDTO> verifyProjectExistDTOs) {
+    public List<VerifyProjectExistDTO> verifyProjectsExist(List<VerifyProjectExistDTO> verifyProjectExistDTOs) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = DOMAIN_NAME + "/projects/invalid-project-ids?projects={projects}";
 
         Map<String, String> uriVariables = Maps.newHashMap();
         uriVariables.put("projects", JSONObject.toJSONString(verifyProjectExistDTOs));
-        return restTemplate.getForEntity(url, VerifyProjectExistResponse.class, uriVariables).getBody()
-                .getNotExistsProjectIds();
+        return restTemplate.exchange(String.format("%s%s%s", DOMAIN_NAME, INVALID_PROJECT_URI,  "?projects={projects}"),
+                GET, null, new ParameterizedTypeReference<List<VerifyProjectExistDTO>>() {
+        }, uriVariables).getBody();
     }
 }
