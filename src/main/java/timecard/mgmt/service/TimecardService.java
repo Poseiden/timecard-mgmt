@@ -32,6 +32,7 @@ public class TimecardService {
     }
 
     //讲师注释：bad smell, 方法命名。 建议将 save 改为 submitTimecard
+    //讲师注释： bad smell, 过长方法，建议拆成三到四个方法
     public void save(SubmitTimecardDTO submitTimecardDto) {
         //讲师注释：bad smell, 建议将list改为 toBeSavedEfforts
         List<Effort> list = Lists.newArrayList();
