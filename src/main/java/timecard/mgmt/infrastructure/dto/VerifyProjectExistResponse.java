@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+//todo to delete this class
 public class VerifyProjectExistResponse {
     @NonNull
     private Map<String, Set<String>> notExistsProjectIds;

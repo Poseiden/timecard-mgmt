@@ -29,7 +29,8 @@ public class TimecardControllerTest extends APIBaseTest {
     private ProjectServiceProxy projectService;
 
     @Test
-    public void should_return_success_when_submit_timecard() throws Exception {
+    //todo 不语义化的命名
+    public void testSubmitTimecard_1() throws Exception {
         //given
         when(projectService.verifyProjectsExist(any())).thenReturn(Lists.newArrayList());
 
@@ -39,10 +40,14 @@ public class TimecardControllerTest extends APIBaseTest {
                         .contentType(APPLICATION_JSON)
                         .content(JSON.toJSONString(submitTimeCardDTO)))
                 .andExpect(status().isOk());
+
+        //todo 没有关于数据库中留存数据的断言
+        //改为不是断言，而是 sout 出数据库中的数据
     }
 
     @Test
-    public void should_return_project_not_exists_when_project_id_in_timecard_not_exists() throws Exception {
+    //todo 不语义化的命名
+    public void testSubmitTimecard_2() throws Exception {
         //given
         when(projectService.verifyProjectsExist(any())).
                 thenReturn(Lists.newArrayList(new VerifyProjectExistDTO("some not exist project ids", Sets.newHashSet())));
@@ -54,6 +59,8 @@ public class TimecardControllerTest extends APIBaseTest {
                 .content(JSON.toJSONString(submitTimeCardDTO)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error", is(PROJECTS_OR_SUBPROJECTS_NOT_EXIST.toString())));
+
+        //todo 没有关于数据库中留存数据的断言
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTO() {

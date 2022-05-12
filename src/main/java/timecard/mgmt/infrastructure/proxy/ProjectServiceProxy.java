@@ -14,15 +14,14 @@ import static org.springframework.http.HttpMethod.GET;
 
 @Component
 public class ProjectServiceProxy {
-    private static final String DOMAIN_NAME = "http://localhost:8081";
-    public static final String INVALID_PROJECT_URI = "/projects/invalid-project-ids";
 
     public List<VerifyProjectExistDTO> verifyProjectsExist(List<VerifyProjectExistDTO> verifyProjectExistDTOs) {
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, String> uriVariables = Maps.newHashMap();
         uriVariables.put("projects", JSONObject.toJSONString(verifyProjectExistDTOs));
-        return restTemplate.exchange(String.format("%s%s%s", DOMAIN_NAME, INVALID_PROJECT_URI,  "?projects={projects}"),
+        //todo magic number, 写死的字符串
+        return restTemplate.exchange("http://localhost:8081/projects/invalid-project-ids?projects={projects}",
                 GET, null, new ParameterizedTypeReference<List<VerifyProjectExistDTO>>() {
         }, uriVariables).getBody();
     }
