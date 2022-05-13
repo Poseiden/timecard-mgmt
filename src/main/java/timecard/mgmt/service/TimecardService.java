@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static timecard.mgmt.bean.EffortStatus.SUBMITTED;
+import static timecard.mgmt.exception.ErrorKey.WRONG_WORKING_HOURS;
 
 @Service
 public class TimecardService {
@@ -42,13 +43,18 @@ public class TimecardService {
             entry.getSubEntries().forEach(
                     subEntryDTO -> efforts.addAll(
                             subEntryDTO.getEfforts().stream()
-                                    //todo 参数过多。使用 builder 模式(正确的代码中要改)
-                                    //todo 设计 effort 一些自校验，用来凸显 特性依恋 坏味道
-                                    .map(effortDTO -> new Effort(submitTimecardDto.getEmployeeId(),
-                                            LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
-                                            subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
-                                            effortDTO.getNote(), subEntryDTO.getSubProjectId(),
-                                            entry.getProjectId(), SUBMITTED))
+                                    //讲师注释: bad smell, 参数过多。建议使用 builder 模式
+                                    .map(effortDTO -> {
+                                        //讲师注释: bad smell, 特性依恋，可将校验逻辑抽成EffortDTO 的实例化方法
+                                        if (effortDTO.getWorkingHours() < 4 || effortDTO.getWorkingHours() > 8) {
+                                            throw new BusinessException(WRONG_WORKING_HOURS);
+                                        }
+                                        return new Effort(submitTimecardDto.getEmployeeId(),
+                                                LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
+                                                subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
+                                                effortDTO.getNote(), subEntryDTO.getSubProjectId(),
+                                                entry.getProjectId(), SUBMITTED);
+                                    })
                                     .collect(Collectors.toList())
                     ));
 
@@ -56,7 +62,7 @@ public class TimecardService {
         });
 
         //讲师注释：bad smell, map 建议命名为toBeVerifiedProjectIds
-        //组装待校验数据
+        //从上一步的数据中拿出相应的 projectid 和 subprojectid , 并校验是否存在
         Map<String, Set<String>> map = list.stream()
                 .collect(Collectors
                         .toMap(Effort::getProjectId,
