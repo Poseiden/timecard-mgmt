@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSON;
 import org.assertj.core.util.Lists;
 import org.assertj.core.util.Sets;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import timecard.mgmt.base.APIBaseTest;
+import timecard.mgmt.bean.Effort;
+import timecard.mgmt.bean.VerifyProjectExistDTO;
+import timecard.mgmt.dao.hibernate.EffortRepoJPA;
 import timecard.mgmt.dto.EffortDTO;
 import timecard.mgmt.dto.EntryDTO;
 import timecard.mgmt.dto.SubEntryDTO;
 import timecard.mgmt.dto.SubmitTimecardDTO;
-import timecard.mgmt.base.APIBaseTest;
-import timecard.mgmt.bean.VerifyProjectExistDTO;
 import timecard.mgmt.proxy.ProjectServiceProxy;
 
 import java.time.LocalDate;
@@ -27,9 +30,11 @@ import static timecard.mgmt.exception.ErrorKey.PROJECTS_OR_SUBPROJECTS_NOT_EXIST
 public class TimecardControllerTest extends APIBaseTest {
     @MockBean
     private ProjectServiceProxy projectService;
+    @Autowired
+    private EffortRepoJPA effortRepoJPA;
 
     @Test
-    //todo 不语义化的命名
+    //讲师注释: bad smell: 不语义化的命名
     public void testSubmitTimecard_1() throws Exception {
         //given
         when(projectService.verifyData(any())).thenReturn(Lists.newArrayList());
@@ -41,12 +46,18 @@ public class TimecardControllerTest extends APIBaseTest {
                         .content(JSON.toJSONString(submitTimeCardDTO)))
                 .andExpect(status().isOk());
 
-        //todo 没有关于数据库中留存数据的断言
-        //改为不是断言，而是 sout 出数据库中的数据
+        //讲师注释 bad smell: 只断言状态码，数据库中的数据没有断言，只是 sout, 且只看部分字段
+        Effort effort = this.effortRepoJPA.findAll().get(0);
+        System.out.println(effort.getId());
+        System.out.println(effort.getProjectId());
+        System.out.println(effort.getSubProjectId());
+        System.out.println(effort.getEmployeeId());
+        System.out.println(effort.getEffortStatus());
+
     }
 
     @Test
-    //todo 不语义化的命名
+    //讲师注释: bad smell: 不语义化的命名
     public void testSubmitTimecard_2() throws Exception {
         //given
         when(projectService.verifyData(any())).
@@ -60,7 +71,7 @@ public class TimecardControllerTest extends APIBaseTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error", is(PROJECTS_OR_SUBPROJECTS_NOT_EXIST.toString())));
 
-        //todo 没有关于数据库中留存数据的断言
+        //讲师注释 bad smell: 只断言状态码，没有关于数据库中留存数据的断言
     }
 
     private SubmitTimecardDTO buildSubmitTimeCardDTO() {

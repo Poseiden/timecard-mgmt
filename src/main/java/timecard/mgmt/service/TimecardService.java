@@ -42,6 +42,7 @@ public class TimecardService {
             List<Effort> efforts = Lists.newArrayList();
             entry.getSubEntries().forEach(
                     subEntryDTO -> efforts.addAll(
+                            // 将每一个 EffortDto 转换为 Effort
                             subEntryDTO.getEfforts().stream()
                                     //讲师注释: bad smell, 参数过多。建议使用 builder 模式
                                     .map(effortDTO -> {
