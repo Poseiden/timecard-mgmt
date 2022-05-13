@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static timecard.mgmt.domain.common.exception.ErrorKey.WRONG_WORKING_HOURS;
 import static timecard.mgmt.domain.model.effortmgmt.effort.EffortStatus.SUBMITTED;
 
 @Service
@@ -87,12 +88,19 @@ public class TimecardApplicationService {
 
     private List<Effort> buildEffortsFromEffortDtos(String employeeId, SubEntryDTO subEntryDTO, String projectId) {
         return subEntryDTO.getEfforts().stream()
-                .map(effortDTO -> new EffortBuilder().employeeId(employeeId)
-                        .workingDay(LocalDate.parse(effortDTO.getDate())).workingHours(effortDTO.getWorkingHours())
-                        .locationId(subEntryDTO.getLocationCode()).billable(subEntryDTO.isBillable())
-                        .note(effortDTO.getNote()).subProjectId(subEntryDTO.getSubProjectId())
-                        .projectId(projectId).effortStatus(SUBMITTED)
-                        .build())
+                .map(effortDTO -> {
+                    if (effortDTO.validateWorkingHours()) {
+                        throw new BusinessException(WRONG_WORKING_HOURS);
+                    }
+
+                    return new EffortBuilder().employeeId(employeeId)
+                            .workingDay(LocalDate.parse(effortDTO.getDate())).workingHours(effortDTO.getWorkingHours())
+                            .locationId(subEntryDTO.getLocationCode()).billable(subEntryDTO.isBillable())
+                            .note(effortDTO.getNote()).subProjectId(subEntryDTO.getSubProjectId())
+                            .projectId(projectId).effortStatus(SUBMITTED)
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
+
 }

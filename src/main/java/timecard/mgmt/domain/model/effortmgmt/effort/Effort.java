@@ -50,7 +50,7 @@ public class Effort {
         this.effortStatus = effortStatus;
     }
 
-    public Effort(EffortBuilder builder) {
+    Effort(EffortBuilder builder) {
         this.employeeId = builder.getEmployeeId();
         this.workingDay = builder.getWorkingDay();
         this.workingHours = builder.getWorkingHours();

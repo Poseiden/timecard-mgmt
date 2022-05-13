@@ -12,4 +12,8 @@ public class EffortDTO {
     private int workingHours;
     @NonNull
     private String note;
+
+    public boolean validateWorkingHours() {
+        return getWorkingHours() < 4 || getWorkingHours() > 8;
+    }
 }
