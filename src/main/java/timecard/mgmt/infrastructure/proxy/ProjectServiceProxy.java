@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
+import timecard.mgmt.domain.service.VerifyProjectExistDTO;
 import timecard.mgmt.domain.service.ProjectService;
 
 import java.util.List;

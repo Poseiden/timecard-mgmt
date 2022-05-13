@@ -8,10 +8,11 @@ import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.domain.common.exception.BusinessException;
 import timecard.mgmt.domain.common.exception.ErrorKey;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
+import timecard.mgmt.domain.model.effortmgmt.effort.EffortBuilder;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;
+import timecard.mgmt.domain.service.VerifyProjectExistDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -86,11 +87,12 @@ public class TimecardApplicationService {
 
     private List<Effort> buildEffortsFromEffortDtos(String employeeId, SubEntryDTO subEntryDTO, String projectId) {
         return subEntryDTO.getEfforts().stream()
-                .map(effortDTO -> new Effort(employeeId,
-                        LocalDate.parse(effortDTO.getDate()), effortDTO.getWorkingHours(),
-                    subEntryDTO.getLocationCode(), subEntryDTO.isBillable(),
-                    effortDTO.getNote(), subEntryDTO.getSubProjectId(),
-                        projectId, SUBMITTED))
+                .map(effortDTO -> new EffortBuilder().employeeId(employeeId)
+                        .workingDay(LocalDate.parse(effortDTO.getDate())).workingHours(effortDTO.getWorkingHours())
+                        .locationId(subEntryDTO.getLocationCode()).billable(subEntryDTO.isBillable())
+                        .note(effortDTO.getNote()).subProjectId(subEntryDTO.getSubProjectId())
+                        .projectId(projectId).effortStatus(SUBMITTED)
+                        .build())
                 .collect(Collectors.toList());
     }
 }

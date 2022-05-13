@@ -11,7 +11,7 @@ import timecard.mgmt.application.dto.EntryDTO;
 import timecard.mgmt.application.dto.SubEntryDTO;
 import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.base.APIBaseTest;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
+import timecard.mgmt.domain.service.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.service.ProjectService;
 import timecard.mgmt.infrastructure.persistence.hibernate.EffortRepoJPA;

@@ -11,7 +11,7 @@ import timecard.mgmt.application.dto.SubmitTimecardDTO;
 import timecard.mgmt.application.service.TimecardApplicationService;
 import timecard.mgmt.base.UnitBaseTest;
 import timecard.mgmt.domain.common.exception.BusinessException;
-import timecard.mgmt.domain.dto.VerifyProjectExistDTO;
+import timecard.mgmt.domain.service.VerifyProjectExistDTO;
 import timecard.mgmt.domain.model.effortmgmt.effort.Effort;
 import timecard.mgmt.domain.model.effortmgmt.effort.EffortRepository;
 import timecard.mgmt.domain.service.ProjectService;

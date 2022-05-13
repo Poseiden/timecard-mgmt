@@ -49,4 +49,16 @@ public class Effort {
         this.projectId = projectId;
         this.effortStatus = effortStatus;
     }
+
+    public Effort(EffortBuilder builder) {
+        this.employeeId = builder.getEmployeeId();
+        this.workingDay = builder.getWorkingDay();
+        this.workingHours = builder.getWorkingHours();
+        this.locationId = builder.getLocationId();
+        this.billable = builder.isBillable();
+        this.note = builder.getNote();
+        this.subProjectId = builder.getSubProjectId();
+        this.projectId = builder.getProjectId();
+        this.effortStatus = builder.getEffortStatus();
+    }
 }

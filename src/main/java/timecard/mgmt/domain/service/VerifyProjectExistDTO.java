@@ -1,4 +1,4 @@
-package timecard.mgmt.domain.dto;
+package timecard.mgmt.domain.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
