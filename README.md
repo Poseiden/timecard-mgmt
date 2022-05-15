@@ -16,6 +16,7 @@
 //Step0 在启动该项目前，请预先安装好 Java8 以及 Docker，下载地址：
 //Java8: https://www.java.com/en/download/manual.jsp
 //Docker: https://docs.docker.com/get-docker/
+//本项目正常运行需要占用两个端口，分别为 8080 与 33306, 请提前预留，或自行修改端口号
 
 // Step1  创建该项目所需的数据库实例
 sh ./env-build-scripts/create_database_instance.sh  //在项目根目录下执行
