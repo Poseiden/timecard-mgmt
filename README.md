@@ -11,22 +11,26 @@
 - Java8
 - Docker
 
-## 运行命令
+## 启动命令
 ```bash
 
-sh ./env-build-scripts/create_database_instance.sh  //在项目根目录下执行, 创建数据库实例
+// Step1  创建该项目所需的数据库实例
+sh ./env-build-scripts/create_database_instance.sh  //在项目根目录下执行
 
-// env-build-scripts/init_db.sql 为在数据库实例中创建本项目所需数据库的 sql 语句
+// Step2 创建数据库。 待上一步执行成功后，使用任一数据库连接工具连上此数据库实例（示例用户名密码在命令脚本中），在 sql console 中执行以下sql 脚本,创建数据库
+// env-build-scripts/init_db.sql  
 
-./gradlew build      //项目根目录下执行，构建
+// Step3 启动项目，在首次运行时， 如果系统中没有对应版本的 gradle，那么会先自动下载，之后项目启动时，会自动运行db/migration下的所有sql 脚本，创建对应的表，数据库结构等等, 最后项目启动在 8080 端口下
+./gradlew bootRun       
 
-./gradlew bootRun       //项目根目录下执行，项目启动
+// 附：构建项目命令
+./gradlew build      
 
 ```
 
 ## 词汇表
 
-### 工时词汇表
+### [**工时**]词汇表
 |  领域名词 |  英文   |  模型  |   表名  |  备注  |
 |  :----:  | :----: | :----: | :----: | :----: |
 |    工时  | effort |  Effort  | effort | / | 
